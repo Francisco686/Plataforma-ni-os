@@ -43,11 +43,14 @@
     </style>
 </head>
 <body>
-    <div class="login-overlay">
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="w-100" style="max-width: 600px;">
         @yield('content')
     </div>
+</div>
 
-    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
+
 </html>
