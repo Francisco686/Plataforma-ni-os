@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\SeccionController;
-
+use App\Http\Controllers\AlumnoController;
 
 
 // Redirigir la raíz al login
@@ -38,8 +38,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/taller/{id}', [TallerController::class, 'verTaller'])->name('talleres.ver');
     Route::delete('/talleres/{taller}', [TallerController::class, 'destroy'])->name('talleres.destroy');
     Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
+    Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index');
+    Route::resource('/alumnos', AlumnoController::class)->except(['index']);
 
-
+    Route::post('/docente/cambiar-grupo', [\App\Http\Controllers\UserController::class, 'cambiarGrupo'])
+    ->name('docente.cambiar.grupo');
     Route::get('/secciones/{seccion}/edit', [SeccionController::class, 'edit'])->name('secciones.edit');
     Route::put('/secciones/{seccion}', [SeccionController::class, 'update'])->name('secciones.update');
     Route::delete('/secciones/{seccion}', [SeccionController::class, 'destroy'])->name('secciones.destroy');
