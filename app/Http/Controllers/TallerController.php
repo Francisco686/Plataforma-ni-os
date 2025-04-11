@@ -1,41 +1,146 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\AsignaTaller;
-use App\Models\SeccionTaller;
-use App\Models\ProgresoTaller;
 use App\Models\Taller;
+use App\Models\User;
+use App\Models\AsignaTaller;
+use Illuminate\Http\Request;
 
 class TallerController extends Controller
 {
-    public function misTalleres()
-{
-    $talleres = Taller::all(); // ← Mostramos todos los talleres sin asignación
-    $userId = Auth::id();
-
-    return view('talleres.index', compact('talleres', 'userId'));
-}
-
-    public function verTaller($taller_id)
+    public function index()
     {
-        $asigna = AsignaTaller::where('user_id', Auth::id())->where('taller_id', $taller_id)->firstOrFail();
-        $secciones = SeccionTaller::where('taller_id', $taller_id)->orderBy('orden')->get();
-        $progreso = ProgresoTaller::where('asigna_taller_id', $asigna->id)->pluck('seccion_taller_id')->toArray();
-        return view('talleres.ver', compact('asigna', 'secciones', 'progreso'));
+        $user = auth()->user();
+
+        if($user->role === 'administrador') {
+            $talleres = Taller::withCount('secciones')->get();
+            $usuarios = User::where('role', '!=', 'administrador')->get();
+
+            return view('talleres.index', [
+                'talleres' => $talleres,
+                'userId' => $user->id,
+                'usuarios' => $usuarios,
+            ]);
+        } else {
+            $talleres = $user->talleresAsignados()->withCount('secciones')->get();
+
+            return view('talleres.index', [
+                'talleres' => $talleres,
+                'userId' => $user->id,
+            ]);
+        }
     }
 
-    public function completarSeccion(Request $request)
+    public function create()
     {
-        ProgresoTaller::updateOrCreate([
-            'asigna_taller_id' => $request->asigna_taller_id,
-            'seccion_taller_id' => $request->seccion_taller_id
-        ], [
-            'completado' => true,
-            'fecha_completado' => now()
+        // Verificación simple del rol
+        if (auth()->user()->role !== 'administrador') {
+            abort(403, 'Esta acción no está autorizada');
+        }
+
+        return view('talleres.create');
+    }
+
+
+    public function store(Request $request)
+    {
+        if (auth()->user()->role !== 'administrador') {
+            abort(403, 'Esta acción no está autorizada');
+        }
+
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
         ]);
 
-        return back()->with('ok', '¡Progreso guardado!');
+        Taller::create($validated);
+
+        return redirect()->route('talleres.index')
+            ->with('success', 'Taller creado exitosamente');
     }
+
+    public function edit(Taller $taller)
+    {
+        if (auth()->user()->role !== 'administrador') {
+            abort(403, 'Esta acción no está autorizada');
+        }
+
+        return view('talleres.edit', compact('taller'));
+    }
+
+
+    public function update(Request $request, Taller $taller)
+    {
+        if (auth()->user()->role !== 'administrador') {
+            abort(403, 'Esta acción no está autorizada');
+        }
+
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+        ]);
+
+        $taller->update($validated);
+
+        return redirect()->route('talleres.index')
+            ->with('success', 'Taller actualizado exitosamente');
+    }
+
+
+    public function asignar()
+    {
+        $talleres = Taller::all();
+        $users = User::where('role', 'docente')->get();
+
+        return view('talleres.asignar', compact('talleres', 'users'));
+    }
+
+
+    public function storeAsignacion(Request $request)
+    {
+        $this->authorize('asignar', Taller::class);
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'taller_id' => 'required|exists:talleres,id',
+            'fecha_inicio' => 'nullable|date',
+        ]);
+
+        AsignaTaller::firstOrCreate([
+            'user_id' => $validated['user_id'],
+            'taller_id' => $validated['taller_id'],
+        ], [
+            'fecha_inicio' => $validated['fecha_inicio'] ?? now(),
+        ]);
+
+        return back()->with('success', 'Taller asignado exitosamente');
+    }
+
+    public function show(Taller $taller)
+    {
+        $user = auth()->user();
+        $asignacion = null;
+
+        if($user->role !== 'administrador') {
+            $asignacion = AsignaTaller::where('user_id', $user->id)
+                ->where('taller_id', $taller->id)
+                ->firstOrFail();
+        }
+
+        $secciones = $taller->secciones()->orderBy('orden')->get();
+
+        return view('talleres.show', compact('taller', 'secciones', 'asignacion'));
+    }
+    public function destroy(Taller $taller)
+    {
+        if (auth()->user()->role !== 'administrador') {
+            abort(403, 'Esta acción no está autorizada');
+        }
+
+        $taller->delete();
+
+        return redirect()->route('talleres.index')->with('success', 'Taller eliminado correctamente');
+    }
+
 }

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Nombre completo
             $table->string('curp', 18)->unique(); // CURP único
-            $table->enum('role', ['alumno', 'docente']); // Rol del usuario
+            $table->enum('role', ['alumno', 'docente','administrador']); // Rol del usuario
             $table->string('password'); // Contraseña
             $table->rememberToken();
             $table->timestamps();

@@ -2,31 +2,30 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array
      */
     protected $fillable = [
         'name',
-        'email',
+        'curp',
+        'role',
         'password',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -41,8 +40,49 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relación con los talleres asignados
+     */
+    public function talleresAsignados()
+    {
+        return $this->belongsToMany(Taller::class, 'asigna_tallers', 'user_id', 'taller_id')
+            ->withPivot('fecha_inicio')
+            ->using(AsignaTaller::class);
+    }
+
+    /**
+     * Relación con las asignaciones de talleres
+     */
+    public function asignaciones()
+    {
+        return $this->hasMany(AsignaTaller::class, 'user_id');
+    }
+
+    /**
+     * Verifica si el usuario es administrador
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'administrador';
+    }
+
+    /**
+     * Verifica si el usuario es docente
+     */
+    public function isDocente()
+    {
+        return $this->role === 'docente';
+    }
+
+    /**
+     * Verifica si el usuario es alumno
+     */
+    public function isAlumno()
+    {
+        return $this->role === 'alumno';
     }
 }

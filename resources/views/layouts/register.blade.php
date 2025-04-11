@@ -15,19 +15,19 @@
             height: 100%;
             width: 100%;
             background-color: #f8f9fc;
-            background-image: url("{{ asset('img/fondo2.png') }}");
+            background-image: url("{{ asset('img/fondo3.png') }}");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: 1550px 710px; /* tamaño exacto que quieres */
+            background-size: 1450px 820px; /* tamaño exacto que quieres */
         }
 
         .contenido-centro {
             position: absolute;
-            top: 43%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
-            background-color: #fdfef9; /* fondo blanco semiopaco */
+            background-color: #b1c3ab; /* fondo blanco semiopaco */
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
