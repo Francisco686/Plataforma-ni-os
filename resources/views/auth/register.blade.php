@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <!-- Cambié col-md-6 por col-md-10 para que sea más ancho -->
+            
             <div class="col-md-10">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-5">

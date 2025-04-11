@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card o-hidden border-0 shadow-lg">
+<div class="card o-hidden border-0 shadow-lg" style="max-height: 660px;">
     <div class="card-body p-4">
         <div class="text-center mb-3">
             <h1 class="h4 text-gray-900">Iniciar Sesión</h1>
