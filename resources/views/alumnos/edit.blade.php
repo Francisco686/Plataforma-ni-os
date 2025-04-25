@@ -64,7 +64,10 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar cambios</button>
+        <button type="submit" class="btn btn-danger text-white">
+    <i class="fas fa-save me-1"></i> Guardar cambios
+</button>
+
     </form>
 </div>
 @endsection

@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\SeccionController;
 use App\Http\Controllers\AlumnoController;
-
+use App\Http\Controllers\UserController;
 
 // Redirigir la raíz al login
 Route::get('/', function () {
@@ -35,7 +35,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/talleres/asignar', [TallerController::class, 'asignar'])->name('talleres.asignar');
     Route::post('/talleres/asignar', [TallerController::class, 'storeAsignacion'])->name('talleres.asignar.store');
     Route::get('/talleres/{taller}', [TallerController::class, 'show'])->name('talleres.ver');
-    Route::get('/taller/{id}', [TallerController::class, 'verTaller'])->name('talleres.ver');
+    Route::get('/evaluaciones', [\App\Http\Controllers\EvaluacionController::class, 'index'])->name('evaluaciones.index');
+ 
+
+    Route::post('/usuario/cambiar-grupo', [UserController::class, 'cambiarGrupo'])->name('user.cambiarGrupo');
+    
     Route::delete('/talleres/{taller}', [TallerController::class, 'destroy'])->name('talleres.destroy');
     Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
     Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index');

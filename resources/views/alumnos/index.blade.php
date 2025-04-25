@@ -12,14 +12,41 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('alumnos.create') }}" class="btn btn-primary mb-3">Registrar Alumno</a>
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ route('alumnos.create') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus me-1"></i> Registrar Alumno
+        </a>
+
+        @if(Auth::user()->isDocente())
+        <a href="{{ route('evaluaciones.index') }}" class="btn btn-danger text-white">
+    <i class="fas fa-clipboard-check me-1"></i> Evaluaciones
+</a>
+
+        @endif
+    </div>
+
+    @if(Auth::user()->isDocente())
+        <form method="POST" action="{{ route('user.cambiarGrupo') }}" class="mb-3">
+            @csrf
+            <div class="form-group">
+                <label for="grupo_id">Selecciona tu grupo:</label>
+                <select name="grupo_id" id="grupo_id" class="form-control" onchange="this.form.submit()">
+                    @foreach($grupos as $grupo)
+                        <option value="{{ $grupo->id }}" {{ Auth::user()->grupo_id == $grupo->id ? 'selected' : '' }}>
+                            {{ $grupo->grado }}°{{ strtoupper($grupo->grupo) }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+    @endif
 
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-light">
             <tr>
-                <th>Nombre completo(accede con este nombre)</th>
+                <th>(Accede con este nombre a la plataforma)</th>
                 <th>Grupo</th>
-                <th>Contraseña(no debe ser la misma clave para dos usuarios)</th>
+                <th>Contraseña</th>
                 <th>Acciones</th>
             </tr>
         </thead>

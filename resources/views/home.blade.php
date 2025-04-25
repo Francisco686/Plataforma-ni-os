@@ -20,58 +20,56 @@
 
                     <div class="row mt-4">
                         @if(Auth::user()->role === 'administrador')
-                            <div class="col-md-4 mb-4 animate_animated animatefadeInLeft animate_fast">
+                            <div class="col-md-4 mb-4">
                                 <div class="card card-hover bg-success text-white text-center p-3 h-100">
-                                    <i class="fas fa-tools fa-3x mb-2 icon-animate book-animate"></i>
+                                    <i class="fas fa-tools fa-3x mb-2 icon-animate"></i>
                                     <h4>Gestión de Talleres</h4>
                                     <p>Administra todos los talleres disponibles.</p>
                                     <a href="{{ route('talleres.index') }}" class="btn btn-light btn-sm mt-auto">Administrar</a>
                                 </div>
                             </div>
-                        @else
-                            <div class="col-md-4 mb-4 animate_animated animatefadeInLeft animate_fast">
+                        @endif
+
+                        @if(Auth::user()->role === 'alumno')
+                            <div class="col-md-4 mb-4">
                                 <div class="card card-hover bg-success text-white text-center p-3 h-100">
-                                    <i class="fas fa-book fa-3x mb-2 icon-animate book-animate"></i>
-                                    <h4>Mis talleres</h4>
+                                    <i class="fas fa-book fa-3x mb-2 icon-animate"></i>
+                                    <h4>Mis Talleres</h4>
                                     <p>Accede a tus talleres y consulta tu progreso.</p>
                                     <a href="{{ route('talleres.index') }}" class="btn btn-light btn-sm mt-auto">Ir</a>
                                 </div>
                             </div>
-                        @endif
 
-                        @if(Auth::user()->role === 'docente')
-                            <div class="col-md-4 mb-4 animate_animated animatefadeInUp animate_fast">
-                                <div class="card card-hover bg-warning text-white text-center p-3 h-100">
-                                    <i class="fas fa-edit fa-3x mb-2 icon-animate pencil-animate"></i>
-                                    <h4>Evaluaciones</h4>
-                                    <p>Responde actividades y mejora tus calificaciones.</p>
+                            <div class="col-md-4 mb-4">
+                                <div class="card card-hover bg-info text-white text-center p-3 h-100">
+                                    <i class="fas fa-gamepad fa-3x mb-2 icon-animate"></i>
+                                    <h4>Zona de Juegos</h4>
+                                    <p>Aprende mientras te diviertes con juegos educativos.</p>
                                     <a href="#" class="btn btn-light btn-sm mt-auto">Ir</a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="card card-hover bg-primary text-white text-center p-3 h-100">
+                                    <i class="fas fa-star fa-3x mb-2 icon-animate"></i>
+                                    <h4>Mis Logros</h4>
+                                    <p>Descubre tus insignias y premios obtenidos.</p>
+                                    <a href="#" class="btn btn-light btn-sm mt-auto">Ver</a>
                                 </div>
                             </div>
                         @endif
 
-                        <div class="col-md-4 mb-4 animate_animated animatefadeInRight animate_fast">
-                            <div class="card card-hover bg-info text-white text-center p-3 h-100">
-                                <i class="fas fa-gamepad fa-3x mb-2 icon-animate gamepad-animate"></i>
-                                <h4>Zona de Juegos</h4>
-                                <p>Aprende mientras te diviertes con juegos educativos.</p>
-                                <a href="#" class="btn btn-light btn-sm mt-auto">Ir</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-4 animate_animated animatefadeInLeft animate_fast">
-                            <div class="card card-hover bg-primary text-white text-center p-3 h-100">
-                                <i class="fas fa-star fa-3x mb-2 icon-animate star-animate"></i>
-                                <h4>Mis Logros</h4>
-                                <p>Descubre tus insignias y premios obtenidos.</p>
-                                <a href="#" class="btn btn-light btn-sm mt-auto">Ver</a>
-                            </div>
-                        </div>
-
                         @if(Auth::user()->role === 'docente')
-                            <div class="col-md-6 mb-4 animate_animated animatefadeInRight animate_fast">
+                            <div class="col-md-6 mb-4">
+                                <div class="card card-hover bg-warning text-white text-center p-3 h-100">
+                                    <i class="fas fa-clipboard-list fa-3x mb-2 icon-animate"></i>
+                                    <h4>Evaluaciones</h4>
+                                    <p>Consulta el avance de tus alumnos.</p>
+                                    <a href="{{ route('evaluaciones.index') }}" class="btn btn-light btn-sm mt-auto">Ir</a>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
                                 <div class="card card-hover bg-danger text-white text-center p-3 h-100">
                                     <i class="fas fa-user-plus fa-3x mb-2 icon-animate"></i>
                                     <h4>Registrar Alumnos</h4>
@@ -85,7 +83,7 @@
                     <div class="mt-5 animate_animated animate_fadeInUp">
                         <a href="{{ route('logout') }}" class="btn btn-dark btn-lg btn-hover"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fas fa-sign-out-alt icon-animate logout-animate"></i> Cerrar Sesión
+                            <i class="fas fa-sign-out-alt icon-animate"></i> Cerrar Sesión
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf

@@ -11,9 +11,11 @@ class Group extends Model
 
     protected $fillable = ['grado', 'grupo'];
 
-    public function alumnos() {
-        return $this->hasMany(\App\Models\Alumno::class);
-    }
+    public function alumnos()
+{
+    return $this->hasMany(User::class, 'grupo_id');
+}
+
 
     public function getNombreAttribute() {
         return $this->grado . '°' . strtoupper($this->grupo);

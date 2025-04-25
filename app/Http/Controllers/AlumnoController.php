@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -11,8 +12,11 @@ class AlumnoController extends Controller
 {
     public function index()
     {
-        $alumnos = User::where('role', 'alumno')->with('grupo')->get();
-        return view('alumnos.index', compact('alumnos'));
+        $grupos = Group::all();
+        $grupo = Auth::user()->grupo;
+        $alumnos = $grupo ? $grupo->alumnos()->where('role', 'alumno')->get() : [];
+
+        return view('alumnos.index', compact('grupos', 'alumnos'));
     }
 
     public function create()
@@ -97,6 +101,12 @@ class AlumnoController extends Controller
     public function destroy($id)
     {
         $alumno = User::findOrFail($id);
+
+        if ($alumno->role !== 'alumno') {
+            return redirect()->route('alumnos.index')->with('error', 'Solo puedes eliminar alumnos desde esta sección.');
+        }
+
+        $alumno->talleresAsignados()->delete();
         $alumno->delete();
 
         return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado correctamente.');
