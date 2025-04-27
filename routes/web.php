@@ -8,11 +8,18 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\SeccionTallerController;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 // Redirigir la raíz al login
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+Route::get('/migrate', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migraciones ejecutadas exitosamente.';
+});
+
 
 // Rutas de autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
