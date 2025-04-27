@@ -12,14 +12,21 @@ class Taller extends Model
     protected $table = 'tallers'; // ← aquí defines el nombre real
 
     protected $fillable = [
-        'nombre',
+        'titulo',
         'descripcion',
+        'materiales',
     ];
+    
 
     public function secciones()
     {
         return $this->hasMany(SeccionTaller::class);
     }
+    public function alumnos()
+    {
+    return $this->belongsToMany(User::class, 'alumno_taller');
+    }
+
 
     public function progresoCompletado($asignaId)
     {
@@ -30,4 +37,16 @@ class Taller extends Model
             ->where('completado', true)
             ->count();
     }
+    public function respuestas()
+{
+    return $this->hasManyThrough(
+        \App\Models\RespuestaAlumno::class,
+        \App\Models\SeccionTaller::class,
+        'taller_id', // foreign key in secciones
+        'seccion_id', // foreign key in respuestas
+        'id', // local key in taller
+        'id'  // local key in seccion
+    );
+}
+
 }

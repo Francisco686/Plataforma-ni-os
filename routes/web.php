@@ -6,6 +6,8 @@ use App\Http\Controllers\TallerController;
 use App\Http\Controllers\SeccionController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EvaluacionController;
+use App\Http\Controllers\SeccionTallerController;
 
 // Redirigir la raíz al login
 Route::get('/', function () {
@@ -19,37 +21,50 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Ruta protegida para usuarios autenticados
-Route::get('/home', function () {
-    return view('home');
-})->middleware('auth')->name('home');
-
-
-
+// Rutas protegidas para usuarios autenticados
 Route::middleware(['auth'])->group(function () {
+
+    // Inicio
+    Route::get('/home', fn () => view('home'))->name('home');
+
+    // Talleres generales
     Route::get('/talleres', [TallerController::class, 'index'])->name('talleres.index');
-    Route::get('/talleres/create', [TallerController::class, 'create'])->name('talleres.create');
     Route::post('/talleres', [TallerController::class, 'store'])->name('talleres.store');
     Route::get('/talleres/{taller}/edit', [TallerController::class, 'edit'])->name('talleres.edit');
     Route::put('/talleres/{taller}', [TallerController::class, 'update'])->name('talleres.update');
+    Route::delete('/talleres/{taller}', [TallerController::class, 'destroy'])->name('talleres.destroy');
+
+    // Asignación de talleres
     Route::get('/talleres/asignar', [TallerController::class, 'asignar'])->name('talleres.asignar');
     Route::post('/talleres/asignar', [TallerController::class, 'storeAsignacion'])->name('talleres.asignar.store');
+    Route::post('/taller/completar', [TallerController::class, 'completarSeccion'])->name('talleres.completar');
     Route::get('/talleres/{taller}', [TallerController::class, 'show'])->name('talleres.ver');
-    Route::get('/evaluaciones', [\App\Http\Controllers\EvaluacionController::class, 'index'])->name('evaluaciones.index');
- 
 
+    // Evaluaciones
+    Route::get('/evaluaciones', [EvaluacionController::class, 'index'])->name('evaluaciones.index');
+
+    // Rutas específicas para docente
+    Route::get('/docente/talleres', [TallerController::class, 'index'])->name('docente.talleres.index');
+    Route::post('/docente/talleres', [TallerController::class, 'store'])->name('docente.talleres.store');
+
+    // Gestión de grupo
     Route::post('/usuario/cambiar-grupo', [UserController::class, 'cambiarGrupo'])->name('user.cambiarGrupo');
-    
-    Route::delete('/talleres/{taller}', [TallerController::class, 'destroy'])->name('talleres.destroy');
-    Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
-    Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index');
-    Route::resource('/alumnos', AlumnoController::class)->except(['index']);
+    Route::post('/docente/cambiar-grupo', [UserController::class, 'cambiarGrupo'])->name('docente.cambiar.grupo');
 
-    Route::post('/docente/cambiar-grupo', [\App\Http\Controllers\UserController::class, 'cambiarGrupo'])
-    ->name('docente.cambiar.grupo');
+    // Secciones
+    Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
     Route::get('/secciones/{seccion}/edit', [SeccionController::class, 'edit'])->name('secciones.edit');
     Route::put('/secciones/{seccion}', [SeccionController::class, 'update'])->name('secciones.update');
     Route::delete('/secciones/{seccion}', [SeccionController::class, 'destroy'])->name('secciones.destroy');
 
-    Route::post('/taller/completar', [TallerController::class, 'completarSeccion'])->name('talleres.completar');
+    // Alumnos
+    Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index');
+    Route::resource('alumnos', AlumnoController::class)->except(['index']);
+    Route::get('/talleres/{taller}/secciones/create', [SeccionTallerController::class, 'create'])->name('secciones.create');
+Route::post('/talleres/{taller}/secciones', [SeccionTallerController::class, 'store'])->name('secciones.store');
+
+    Route::get('/talleres/{taller}/secciones/create', [SeccionTallerController::class, 'create'])->name('secciones.create');
+Route::post('/talleres/{taller}/secciones', [SeccionTallerController::class, 'store'])->name('secciones.store');
+Route::get('/talleres/{taller}', [TallerController::class, 'show'])->name('talleres.show');
+
 });

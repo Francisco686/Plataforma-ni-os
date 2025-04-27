@@ -19,6 +19,7 @@
                     </div>
 
                     <div class="row mt-4">
+
                         @if(Auth::user()->role === 'administrador')
                             <div class="col-md-4 mb-4">
                                 <div class="card card-hover bg-success text-white text-center p-3 h-100">
@@ -26,6 +27,20 @@
                                     <h4>Gestión de Talleres</h4>
                                     <p>Administra todos los talleres disponibles.</p>
                                     <a href="{{ route('talleres.index') }}" class="btn btn-light btn-sm mt-auto">Administrar</a>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(Auth::user()->isDocente())
+                            <div class="col-md-4 mb-4">
+                                <div class="card text-white bg-info h-100">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <div>
+                                            <h5 class="card-title"><i class="fas fa-tools me-2"></i>Crear / Asignar Talleres</h5>
+                                            <p class="card-text">Agrega nuevos talleres y asígnalos fácilmente a tus alumnos.</p>
+                                        </div>
+                                        <a href="{{ route('talleres.index') }}" class="btn btn-light mt-3">Ir</a>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -78,6 +93,7 @@
                                 </div>
                             </div>
                         @endif
+
                     </div>
 
                     <div class="mt-5 animate_animated animate_fadeInUp">

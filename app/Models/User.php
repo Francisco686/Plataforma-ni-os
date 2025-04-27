@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password_visible',
         'grupo_id',
     ];
+    
 
     protected $hidden = [
         'password',
@@ -29,6 +30,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function talleres()
+    {
+    return $this->belongsToMany(Taller::class, 'alumno_taller');
+    }
+
+    public function respuestas()
+{
+    return $this->hasMany(\App\Models\RespuestaAlumno::class);
+}
 
     public function grupo()
     {

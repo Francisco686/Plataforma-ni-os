@@ -1,58 +1,41 @@
-@extends('layouts.register')
+@extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
-
-        <div class="col-md-10">
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-5">
-                    <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">Crear una Cuenta</h1>
-                    </div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger text-center">
-                            @foreach ($errors->all() as $error)
-                                <p>{{ $error }}</p>
-                            @endforeach
-                        </div>
-                    @endif
+        <div class="col-md-6">
+            <div class="card shadow rounded-4">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Crear Cuenta Docente</h4>
+                </div>
+                <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
-                        <div class="form-group">
-                            <label for="name">Nombre Completo</label>
-                            <input type="text" name="name" id="name" class="form-control" required>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre Completo</label>
+                            <input id="name" type="text" class="form-control" name="name" required autofocus>
                         </div>
 
-                        <div class="form-group">
-                            <label for="role">Tipo de Usuario</label>
-                            <select name="role" id="role" class="form-control" required>
-                                <option value="alumno">Alumno</option>
-                                <option value="docente">Docente</option>
-                            </select>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input id="password" type="password" class="form-control" name="password" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">Contraseña</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
+                        <div class="mb-3">
+                            <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+                            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password_confirmation">Confirmar Contraseña</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-                        </div>
-
-                        <div class="form-group text-center mt-4">
-                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                <i class="fas fa-user-plus"></i> Registrarse
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-2"></i> Registrarse
                             </button>
                         </div>
                     </form>
-                    <hr>
-                    <div class="text-center">
-                        <a class="small text-primary" href="{{ route('login') }}">¿Ya tienes una cuenta? Inicia sesión</a>
-                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    ¿Ya tienes cuenta? <a href="{{ route('login') }}">Inicia sesión aquí</a>
                 </div>
             </div>
         </div>

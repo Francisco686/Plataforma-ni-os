@@ -31,13 +31,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'role' => 'required|in:alumno,docente',
             'name' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = new User();
-        $user->role = $request->role;
+        $user->role = 'docente'; // Siempre asigna "docente"
         $user->name = $request->name;
         $user->password = Hash::make($request->password);
         $user->password_visible = $request->password;
