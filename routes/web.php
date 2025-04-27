@@ -8,7 +8,6 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\SeccionTallerController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 // Redirigir la raíz al login
 Route::get('/', function () {
