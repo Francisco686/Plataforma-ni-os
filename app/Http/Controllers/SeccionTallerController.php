@@ -40,4 +40,39 @@ class SeccionTallerController extends Controller
 
         return redirect()->route('talleres.edit', $taller)->with('success', 'Sección agregada correctamente.');
     }
+
+    public function edit($id)
+    {
+        $seccion = SeccionTaller::findOrFail($id);
+        return view('secciones.edit', compact('seccion'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tipo' => 'required|in:lectura,actividad,test',
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'opciones' => 'nullable|array',
+            'respuesta_correcta' => 'nullable'
+        ]);
+
+        $seccion = SeccionTaller::findOrFail($id);
+        $seccion->tipo = $request->tipo;
+        $seccion->nombre = $request->nombre;
+        $seccion->descripcion = $request->descripcion;
+        $seccion->contenido = $request->descripcion;
+
+        if ($request->tipo === 'test') {
+            $seccion->opciones = json_encode($request->opciones);
+            $seccion->respuesta_correcta = $request->opciones[$request->respuesta_correcta] ?? null;
+        } else {
+            $seccion->opciones = null;
+            $seccion->respuesta_correcta = null;
+        }
+
+        $seccion->save();
+
+        return redirect()->route('talleres.edit', $seccion->taller_id)->with('success', 'Sección actualizada correctamente.');
+    }
 }

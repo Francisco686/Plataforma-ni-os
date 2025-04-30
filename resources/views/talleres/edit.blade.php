@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container py-5">
+
+    @if(session('success'))
+        <div class="alert alert-success text-center">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <h2 class="text-center mb-4">Editar Taller</h2>
 
     <div class="row justify-content-center">
@@ -47,6 +54,28 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    {{-- Secciones del taller --}}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+            <h4 class="text-primary mb-3">Secciones del Taller</h4>
+
+            @forelse($taller->secciones as $seccion)
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">{{ $seccion->nombre }} <small class="text-muted">({{ ucfirst($seccion->tipo) }})</small></h5>
+                        <p class="card-text">{{ Str::limit($seccion->descripcion, 150) }}</p>
+
+                        <a href="{{ route('secciones.edit', $seccion->id) }}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Editar Sección
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <p class="text-muted">Este taller aún no tiene secciones.</p>
+            @endforelse
         </div>
     </div>
 </div>

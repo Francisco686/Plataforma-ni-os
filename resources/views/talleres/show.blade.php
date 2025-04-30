@@ -2,68 +2,65 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="text-center mb-4">
-        <h2 class="fw-bold">{{ $taller->titulo }}</h2>
-        <p class="text-muted">{{ $taller->descripcion }}</p>
-    </div>
+    <h2 class="text-center fw-bold mb-4 text-success">Ambiente</h2>
+    <p class="text-center text-muted mb-5">el ambiente, para los servicios</p>
 
-    @if($taller->materiales)
-        <div class="text-center mb-5">
-            <a href="{{ asset('storage/' . $taller->materiales) }}" target="_blank" class="btn btn-outline-primary">
-                <i class="fas fa-file-alt me-1"></i> Ver material adjunto
-            </a>
+    <h4 class="fw-semibold mb-4 text-primary">Secciones del Taller</h4>
+
+    @foreach ($taller->secciones as $seccion)
+        <div class="card mb-4 shadow-sm rounded-4">
+            <div class="card-body">
+                <h5 class="card-title">Cuestionario</h5>
+
+                @if($seccion->tipo === 'texto')
+                    <p><strong>Tipo:</strong> Texto</p>
+                    <p>{{ $seccion->contenido }}</p>
+
+                @elseif($seccion->tipo === 'actividad')
+                    <p><strong>Tipo:</strong> Actividad</p>
+                    <p>{{ $seccion->contenido }}</p>
+
+                @elseif($seccion->tipo === 'test')
+                    <form action="{{ route('respuestas.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="seccion_id" value="{{ $seccion->id }}">
+
+                        <p><strong>Tipo:</strong> Test</p>
+                        <p>responde cuidadosamente ✨</p>
+
+                        <p class="fw-semibold">Pregunta:</p>
+                        <p>{{ $seccion->contenido }}</p>
+
+                        @php
+                            $opciones = json_decode($seccion->opciones, true);
+                        @endphp
+
+                        @foreach($opciones as $i => $opcion)
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"
+                                    name="respuesta"
+                                    id="opcion{{ $seccion->id }}_{{ $i }}"
+                                    value="{{ $opcion }}" required>
+                                <label class="form-check-label" for="opcion{{ $seccion->id }}_{{ $i }}">
+                                    {{ $opcion }}
+                                </label>
+                            </div>
+                        @endforeach
+
+                        <div class="mt-3 text-end">
+                            <button type="submit" class="btn btn-success rounded-pill px-4">
+                                Enviar
+                            </button>
+                        </div>
+                    </form>
+                @endif
+            </div>
         </div>
-    @endif
+    @endforeach
 
-    {{-- Secciones del taller --}}
-    <div class="mb-5">
-        <h4 class="text-primary mb-3">Secciones del Taller</h4>
-
-        @forelse($taller->secciones as $seccion)
-            <div class="card mb-3 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $seccion->nombre }}</h5>
-                    <p class="card-subtitle mb-2 text-muted">Tipo: <strong>{{ ucfirst($seccion->tipo) }}</strong></p>
-                    <p class="card-text">{{ $seccion->descripcion }}</p>
-
-                    @if($seccion->tipo === 'lectura')
-                        <div class="alert alert-info">
-                            📖 Esta sección es solo de lectura.
-                        </div>
-
-                    @elseif($seccion->tipo === 'actividad')
-                        <div class="alert alert-warning">
-                            ✏️ Esta sección requiere que realices una actividad. (funcionalidad en desarrollo)
-                        </div>
-
-                    @elseif($seccion->tipo === 'test')
-                        <form>
-                            <p class="fw-semibold">Pregunta:</p>
-                            <p>{{ $seccion->contenido }}</p>
-                            @php $opciones = json_decode($seccion->opciones, true); @endphp
-
-                            @foreach($opciones as $i => $opcion)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="respuesta_{{ $seccion->id }}" id="opcion{{ $seccion->id }}_{{ $i }}">
-                                    <label class="form-check-label" for="opcion{{ $seccion->id }}_{{ $i }}">
-                                        {{ $opcion }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </form>
-                    @endif
-                </div>
-            </div>
-        @empty
-            <div class="alert alert-secondary">
-                Este taller aún no tiene secciones asignadas.
-            </div>
-        @endforelse
-    </div>
-
-    <div class="text-center">
-        <a href="{{ route('talleres.index') }}" class="btn btn-secondary rounded-pill px-4">
-            <i class="fas fa-arrow-left me-2"></i> Regresar
+    <div class="text-center mt-4">
+        <a href="{{ route('talleres.index') }}" class="btn btn-secondary px-4">
+            ← Regresar
         </a>
     </div>
 </div>
