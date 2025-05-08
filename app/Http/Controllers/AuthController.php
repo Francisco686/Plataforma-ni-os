@@ -16,6 +16,10 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+    public function username()
+{
+    return 'name';
+}
 
     /**
      * Muestra el formulario de registro.
