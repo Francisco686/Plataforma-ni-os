@@ -16,10 +16,11 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+
     public function username()
-{
-    return 'name';
-}
+    {
+        return 'name';
+    }
 
     /**
      * Muestra el formulario de registro.
@@ -34,18 +35,17 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
+
             'password' => 'required|string|min:6|confirmed',
         ]);
+        /////dd($request->all());
 
         $user = new User();
         $user->role = 'docente'; // Siempre asigna "docente"
         $user->name = $request->name;
-<<<<<<< HEAD
-        $user->gmail= strtoupper($request->gmail);
-=======
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
         $user->password = Hash::make($request->password);
         $user->password_visible = $request->password;
         $user->save();
@@ -69,7 +69,7 @@ class AuthController extends Controller
 
         $user = User::get()->first(function ($u) use ($nameInput, $request) {
             return strtolower(trim($u->name)) === $nameInput &&
-                   ($u->password_visible === $request->password || Hash::check($request->password, $u->password));
+                ($u->password_visible === $request->password || Hash::check($request->password, $u->password));
         });
 
         if ($user) {

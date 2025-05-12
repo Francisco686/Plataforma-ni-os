@@ -23,7 +23,7 @@
 
         .contenido-centro {
             position: absolute;
-            top: 44%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
@@ -31,7 +31,7 @@
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
-            max-width: 480px;
+            max-width: 980px;
         }
 
         .login-overlay .card {

@@ -9,33 +9,42 @@ class Taller extends Model
 {
     use HasFactory;
 
-    protected $table = 'tallers'; // ← aquí defines el nombre real
+    protected $table = 'tallers'; // Nombre real de la tabla
 
     protected $fillable = [
         'titulo',
         'descripcion',
         'materiales',
     ];
-    
 
+    /**
+     * Relación con las secciones del taller.
+     */
     public function secciones()
     {
         return $this->hasMany(SeccionTaller::class);
     }
-<<<<<<< HEAD
+
+    /**
+     * Relación con usuarios asignados (pueden ser alumnos o docentes).
+     */
     public function usuariosAsignados()
     {
         return $this->belongsToMany(User::class, 'asigna_tallers', 'taller_id', 'user_id')
             ->withTimestamps();
     }
-=======
+
+    /**
+     * Relación específica con alumnos (si se usa una tabla intermedia distinta).
+     */
     public function alumnos()
     {
-    return $this->belongsToMany(User::class, 'alumno_taller');
+        return $this->belongsToMany(User::class, 'alumno_taller');
     }
 
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
-
+    /**
+     * Obtiene el número de secciones completadas por un alumno (vía asignación).
+     */
     public function progresoCompletado($asignaId)
     {
         $seccionesIds = $this->secciones()->pluck('id');
@@ -45,16 +54,19 @@ class Taller extends Model
             ->where('completado', true)
             ->count();
     }
-    public function respuestas()
-{
-    return $this->hasManyThrough(
-        \App\Models\RespuestaAlumno::class,
-        \App\Models\SeccionTaller::class,
-        'taller_id', // foreign key in secciones
-        'seccion_id', // foreign key in respuestas
-        'id', // local key in taller
-        'id'  // local key in seccion
-    );
-}
 
+    /**
+     * Relación con respuestas de alumnos a través de las secciones del taller.
+     */
+    public function respuestas()
+    {
+        return $this->hasManyThrough(
+            \App\Models\RespuestaAlumno::class,
+            \App\Models\SeccionTaller::class,
+            'taller_id',     // Foreign key en SeccionTaller
+            'seccion_id',    // Foreign key en RespuestaAlumno
+            'id',            // Clave local en Taller
+            'id'             // Clave local en SeccionTaller
+        );
+    }
 }

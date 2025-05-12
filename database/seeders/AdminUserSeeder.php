@@ -12,7 +12,6 @@ class AdminUserSeeder extends Seeder
     {
         DB::table('users')->insert([
             'name' => 'Administrador',
-            'curp' => 'CURPADMIN123456789', // Asegúrate que sea un CURP único
             'role' => 'administrador',
             'password' => Hash::make('12345678'), // Cambia por una contraseña segura
             'created_at' => now(),

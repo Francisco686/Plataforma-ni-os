@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Taller;
 use App\Models\User;
+use App\Models\AsignaTaller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -11,20 +12,18 @@ use Illuminate\Support\Facades\Storage;
 class TallerController extends Controller
 {
     /**
-     * Muestra la vista principal con los talleres y alumnos asignables.
+     * Muestra la vista principal con los talleres según el rol del usuario.
      */
     public function index()
     {
-<<<<<<< HEAD
         $user = auth()->user();
 
-        if($user->role === 'administrador') {
+        if ($user->role === 'administrador') {
             $talleres = Taller::with(['usuariosAsignados', 'secciones'])->withCount('secciones')->get();
 
-            // Para cada taller, obtenemos los usuarios ALUMNOS no asignados
             $talleres->each(function ($taller) {
                 $taller->usuariosNoAsignados = User::where('role', 'alumno')
-                    ->whereDoesntHave('talleresAsignados', function($query) use ($taller) {
+                    ->whereDoesntHave('talleresAsignados', function ($query) use ($taller) {
                         $query->where('taller_id', $taller->id);
                     })->get();
             });
@@ -33,32 +32,24 @@ class TallerController extends Controller
                 'talleres' => $talleres,
                 'userId' => $user->id,
             ]);
-        } else {
-            $talleres = $user->talleresAsignados()->withCount('secciones')->get();
-            return view('talleres.index', [
-                'talleres' => $talleres,
-                'userId' => $user->id,
-            ]);
-=======
-        if (Auth::user()->isDocente()) {
-            // Docente: puede ver todos sus alumnos y talleres
+        }
+
+        if ($user->isDocente()) {
             $alumnos = User::where('role', 'alumno')
-                ->where('grupo_id', Auth::user()->grupo_id)
+                ->where('grupo_id', $user->grupo_id)
                 ->with('grupo')
                 ->get();
-    
+
             $talleres = Taller::with('alumnos')->latest()->get();
-    
-            return view('talleres.talleres', compact('alumnos', 'talleres'));
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
+            $taller = $talleres->first(); // o selecciona el que necesites
+            return view('talleres.talleres', compact('alumnos', 'talleres', 'taller'));
         }
-    
-        // Alumno: solo ve los talleres que tiene asignados
-        $talleres = Auth::user()->talleres()->with('secciones')->get();
-    
+
+        // Alumno
+        $talleres = $user->talleres()->with('secciones')->get();
+
         return view('talleres.mis_talleres', compact('talleres'));
     }
-    
 
     /**
      * Almacena un nuevo taller y lo asigna a alumnos.
@@ -108,7 +99,7 @@ class TallerController extends Controller
     }
 
     /**
-     * Actualiza los datos de un taller (incluyendo archivo si se cambia).
+     * Actualiza los datos de un taller.
      */
     public function update(Request $request, Taller $taller)
     {
@@ -136,8 +127,9 @@ class TallerController extends Controller
         return redirect()->route('talleres.index')->with('success', 'Taller actualizado correctamente.');
     }
 
-<<<<<<< HEAD
-
+    /**
+     * Muestra el formulario para asignar talleres.
+     */
     public function asignar()
     {
         $talleres = Taller::all();
@@ -146,11 +138,11 @@ class TallerController extends Controller
         return view('talleres.asignar', compact('talleres', 'users'));
     }
 
-
+    /**
+     * Almacena una nueva asignación de taller a un usuario.
+     */
     public function storeAsignacion(Request $request)
     {
-        //$this->authorize('asignar', Taller::class);
-
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'taller_id' => 'required|exists:tallers,id',
@@ -167,57 +159,47 @@ class TallerController extends Controller
         return back()->with('success', 'Taller asignado exitosamente');
     }
 
+    /**
+     * Muestra un taller con sus usuarios asignados y no asignados.
+     */
     public function show($id)
     {
-        $taller = Taller::with(['usuariosAsignados' => function($query) {
+        $taller = Taller::with(['usuariosAsignados' => function ($query) {
             $query->select('users.id', 'users.name', 'users.email', 'users.role');
-        }])->findOrFail($id);
+        }, 'secciones'])->findOrFail($id);
 
-        // Obtener usuarios no asignados (asegurando que siempre sea una colección)
-        $usuariosNoAsignados = User::whereDoesntHave('talleresAsignados', function($query) use ($id) {
+        $usuariosNoAsignados = User::whereDoesntHave('talleresAsignados', function ($query) use ($id) {
             $query->where('taller_id', $id);
-        })->get() ?? collect(); // Usamos collect() para crear colección vacía si es null
+        })->get() ?? collect();
 
         return view('talleres.show', compact('taller', 'usuariosNoAsignados'));
     }
-=======
+
     /**
-     * Elimina un taller, su archivo y sus asignaciones.
+     * Elimina un taller, su archivo y asignaciones.
      */
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
     public function destroy(Taller $taller)
     {
-        // Eliminar relaciones con alumnos (pivot)
         $taller->alumnos()->detach();
-    
-        // Eliminar asignaciones si usas modelo AsignaTaller
-        \App\Models\AsignaTaller::where('taller_id', $taller->id)->delete();
-    
-        // Eliminar archivo si existe
+
+        AsignaTaller::where('taller_id', $taller->id)->delete();
+
         if ($taller->materiales && Storage::disk('public')->exists($taller->materiales)) {
             Storage::disk('public')->delete($taller->materiales);
         }
-    
-        // Ahora sí eliminar el taller
+
         $taller->delete();
-    
+
         return redirect()->route('talleres.index')->with('success', 'Taller eliminado correctamente.');
     }
-<<<<<<< HEAD
+
+    /**
+     * Quita la asignación de un usuario a un taller.
+     */
     public function destroyAsignacion(Taller $taller, User $usuario)
     {
         $taller->usuariosAsignados()->detach($usuario->id);
 
         return back()->with('success', 'Usuario removido del taller correctamente');
     }
-=======
-    public function show(Taller $taller)
-{
-    $taller->load('secciones');
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
-
-    return view('talleres.show', compact('taller'));
-}
-
-    
 }

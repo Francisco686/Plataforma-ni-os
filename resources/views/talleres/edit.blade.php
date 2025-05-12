@@ -65,7 +65,7 @@
             @forelse($taller->secciones as $seccion)
                 <div class="card mb-3 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title mb-2">{{ $seccion->nombre }} <small class="text-muted">({{ ucfirst($seccion->tipo) }})</small></h5>
+                        <h5 class="card-title mb-2">{{ $seccion->titulo }} <small class="text-muted">({{ ucfirst($seccion->tipo) }})</small></h5>
                         <p class="card-text">{{ Str::limit($seccion->descripcion, 150) }}</p>
 
                         <a href="{{ route('secciones.edit', $seccion->id) }}" class="btn btn-sm btn-warning">

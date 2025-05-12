@@ -10,21 +10,23 @@ class SeccionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'orden' => 'required|integer|min:1',
-            'taller_id' => 'required|exists:tallers,id'
+            'titulo' => 'required|string|max:255', // ← valida el campo titulo
+            'contenido' => 'nullable|string',
+            'taller_id' => 'required|exists:tallers,id',
+            'tipo' => 'required|in:lectura,actividad,test',
         ]);
 
         SeccionTaller::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'orden' => $request->orden,
-            'taller_id' => $request->taller_id
+            'titulo' => $request->titulo, // ← asigna el campo titulo
+            'contenido' => $request->contenido,
+            'taller_id' => $request->taller_id,
+            'tipo' => $request->tipo,
         ]);
 
         return redirect()->back()->with('success', 'Sección agregada correctamente');
     }
+
+
 
     public function edit(SeccionTaller $seccion)
     {

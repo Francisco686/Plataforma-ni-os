@@ -8,7 +8,7 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('role', ['alumno', 'docente']);
+            $table->enum('role', ['alumno', 'docente','administrador']);
             $table->string('password');
             $table->string('password_visible')->nullable(); // ✅ CAMPO NECESARIO
             $table->foreignId('grupo_id')->nullable()->constrained('groups')->onDelete('set null');

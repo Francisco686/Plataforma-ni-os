@@ -1,72 +1,38 @@
 @extends('layouts.nabvar')
 
 @section('content')
-<div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">
+    <div class="container mt-5">
+        <h2 class="text-center text-primary mb-4">
+            @if(auth()->user()->role === 'administrador')
+                Gestión de Talleres
+            @else
+                Mis Talleres
+            @endif
+        </h2>
+
         @if(auth()->user()->role === 'administrador')
-            Gestión de Talleres
-        @else
-            Mis Talleres
-        @endif
-    </h2>
-
-    @if(auth()->user()->role === 'administrador')
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <a href="{{ route('talleres.create') }}" class="btn btn-success btn-block">
-                    <i class="fas fa-plus-circle"></i> Crear Nuevo Taller
-                </a>
-            </div>
-        </div>
-    @endif
-
-    <div class="row">
-        @forelse($talleres as $taller)
-            @php
-                $asignacion = $taller->asignacion ?? null;
-                $total = $taller->secciones->count();
-                $completadas = $asignacion
-                    ? $asignacion->progresos()->where('completado', true)->count()
-                    : 0;
-                $porcentaje = $total > 0 ? round(($completadas / $total) * 100) : 0;
-            @endphp
-
-            <div class="col-md-4 mb-4 d-flex">
-                <div class="card border-success shadow h-100 w-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-success fw-bold">{{ $taller->nombre }}</h5>
-                        <p class="card-text text-muted">{{ Str::limit($taller->descripcion, 100) }}</p>
-                        <p class="text-muted">Secciones: {{ $total }}</p>
-
-                        <div class="progress mb-3" style="height: 22px;">
-                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                 style="width: {{ $porcentaje }}%;">
-                                {{ $porcentaje }}% Completado
-                            </div>
-                        </div>
-
-                        <a href="{{ route('talleres.ver', $taller->id) }}" class="btn btn-outline-primary">
-                            <i class="fas fa-arrow-right"></i> Ver Taller
-                        </a>
-                    </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <a href="{{ route('talleres.create') }}" class="btn btn-success btn-block">
+                        <i class="fas fa-plus-circle"></i> Crear Nuevo Taller
+                    </a>
                 </div>
             </div>
-<<<<<<< HEAD
         @endif
 
         <div class="row">
             @forelse($talleres as $taller)
                 @php
-                    $showProgress = auth()->user()->role !== 'administrador' && auth()->user()->role !== 'alumno';
+                    // For students and teachers, show progress
+                    $showProgress = auth()->user()->role !== 'administrador';
                     $porcentaje = 0;
 
                     if($showProgress) {
-                        $asignacion = AsignaTaller::where('user_id', $userId)
-                            ->where('taller_id', $taller->id)
-                            ->first();
-
-                        $total = $taller->secciones_count;
-                        $completadas = $asignacion ? $asignacion->progresos()->where('completado', true)->count() : 0;
+                        $asignacion = $taller->asignacion ?? null;
+                        $total = $taller->secciones->count();
+                        $completadas = $asignacion
+                            ? $asignacion->progresos()->where('completado', true)->count()
+                            : 0;
                         $porcentaje = $total > 0 ? round(($completadas / $total) * 100) : 0;
                     }
                 @endphp
@@ -81,7 +47,7 @@
                                 {{ Str::limit($taller->descripcion, 120) }}
                             </p>
                             <p class="text-muted mb-3" style="font-size: 1rem;">
-                                Secciones: {{ $taller->secciones_count }}
+                                Secciones: {{ $taller->secciones->count() }}
                             </p>
 
                             @if($showProgress)
@@ -93,19 +59,17 @@
                                 </div>
                             @endif
 
-
                             <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
                                 @if(auth()->user()->role === 'alumno')
                                     <a href="{{ route('reutilizar.index', $taller->id) }}"
                                        class="btn btn-outline-primary mt-2 mr-2 px-4 py-2">
                                         <i class="fas fa-door-open mr-2"></i> Entrar
                                     </a>
-                                @endif
-                            @if(auth()->user()->role === 'administrador')
-                                        <a href="{{ route('talleres.edit', $taller->id) }}"
-                                           class="btn btn-outline-secondary mt-2 px-4 py-2">
-                                            <i class="fas fa-edit mr-2"></i> Editar
-                                        </a>
+                                @elseif(auth()->user()->role === 'administrador')
+                                    <a href="{{ route('talleres.edit', $taller->id) }}"
+                                       class="btn btn-outline-secondary mt-2 px-4 py-2">
+                                        <i class="fas fa-edit mr-2"></i> Editar
+                                    </a>
                                     <button class="btn btn-outline-info mt-2 px-4 py-2" data-bs-toggle="modal" data-bs-target="#seccionesModal{{ $taller->id }}">
                                         <i class="fas fa-list-ul mr-2"></i> Secciones
                                     </button>
@@ -128,7 +92,6 @@
                     </div>
                 </div>
 
-                <!-- Modal Asignar Taller - Versión mejorada -->
                 <!-- Modal Asignar Taller -->
                 @if(auth()->user()->role === 'administrador')
                     <div class="modal fade" id="asignarModal{{ $taller->id }}" tabindex="-1" aria-labelledby="asignarModalLabel{{ $taller->id }}" aria-hidden="true">
@@ -234,18 +197,18 @@
                                             <table class="table table-hover">
                                                 <thead class="table-light">
                                                 <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Descripción</th>
-                                                    <th>Orden</th>
+                                                    <th>Tipo</th>
+                                                    <th>Título</th>
+                                                    <th>Contenido</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach($taller->secciones()->orderBy('orden')->get() as $seccion)
+                                                @foreach($taller->secciones as $seccion)
                                                     <tr>
-                                                        <td>{{ $seccion->nombre }}</td>
-                                                        <td>{{ Str::limit($seccion->descripcion, 50) }}</td>
-                                                        <td>{{ $seccion->orden }}</td>
+                                                        <td>{{ $seccion->tipo }}</td>
+                                                        <td>{{ $seccion->titulo }}</td>
+                                                        <td>{{ Str::limit($seccion->contenido, 50) }}</td>
                                                         <td>
                                                             <div class="d-flex gap-2">
                                                                 <button onclick="toggleEditForm('editSeccionForm{{ $seccion->id }}', this)"
@@ -272,16 +235,16 @@
                                                                 @method('PUT')
                                                                 <div class="row g-3">
                                                                     <div class="col-md-4">
-                                                                        <label for="nombre" class="form-label">Nombre</label>
-                                                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $seccion->nombre }}" required>
+                                                                        <label for="tipo" class="form-label">Tipo</label>
+                                                                        <input type="text" class="form-control" id="tipo" name="tipo" value="{{ $seccion->tipo }}" required>
                                                                     </div>
-                                                                    <div class="col-md-2">
-                                                                        <label for="orden" class="form-label">Orden</label>
-                                                                        <input type="number" class="form-control" id="orden" name="orden" min="1" value="{{ $seccion->orden }}" required>
+                                                                    <div class="col-md-4">
+                                                                        <label for="titulo" class="form-label">Título</label>
+                                                                        <input type="text" class="form-control" id="titulo" name="titulo" value="{{ $seccion->titulo }}" required>
                                                                     </div>
-                                                                    <div class="col-md-6">
-                                                                        <label for="descripcion" class="form-label">Descripción</label>
-                                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="1">{{ $seccion->descripcion }}</textarea>
+                                                                    <div class="col-md-4">
+                                                                        <label for="contenido" class="form-label">Contenido</label>
+                                                                        <textarea class="form-control" id="contenido" name="contenido">{{ $seccion->contenido }}</textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex justify-content-end gap-2 mt-3">
@@ -320,17 +283,17 @@
                                             <input type="hidden" name="taller_id" value="{{ $taller->id }}">
 
                                             <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <label for="nombre" class="form-label">Nombre</label>
-                                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                                <div class="col-md-4">
+                                                    <label for="tipo" class="form-label">Tipo</label>
+                                                    <input type="text" class="form-control" id="tipo" name="tipo" required>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label for="orden" class="form-label">Orden</label>
-                                                    <input type="number" class="form-control" id="orden" name="orden" min="1" required>
+                                                <div class="col-md-4">
+                                                    <label for="titulo" class="form-label">Título</label>
+                                                    <input type="text" class="form-control" id="titulo" name="titulo" required>
                                                 </div>
-                                                <div class="col-12">
-                                                    <label for="descripcion" class="form-label">Descripción</label>
-                                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                                                <div class="col-md-4">
+                                                    <label for="contenido" class="form-label">Contenido</label>
+                                                    <textarea class="form-control" id="contenido" name="contenido"></textarea>
                                                 </div>
                                             </div>
 
@@ -432,13 +395,4 @@
             }
         </style>
     @endsection
-=======
-        @empty
-            <div class="col-12 text-center">
-                <p>No hay talleres disponibles.</p>
-            </div>
-        @endforelse
-    </div>
-</div>
->>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
 @endsection

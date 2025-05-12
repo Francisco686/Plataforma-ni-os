@@ -4,6 +4,9 @@
     <div class="container py-5">
         <h2 class="text-center mb-4">Agregar Sección al Taller: <span class="text-primary">{{ $taller->titulo }}</span></h2>
 
+        <p class="text-center text-muted">ID del Taller: {{ $taller->id }}</p>
+
+
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-9">
                 <div class="card shadow rounded-4">
@@ -20,7 +23,7 @@
 
                         <form action="{{ route('secciones.store', $taller) }}" method="POST">
                             @csrf
-
+                            <input type="hidden" name="taller_id" value="{{ $taller->id }}">
                             <div class="mb-3">
                                 <label for="tipo" class="form-label fw-semibold">Tipo de Sección</label>
                                 <select name="tipo" id="tipo" class="form-select" required>
