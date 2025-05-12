@@ -9,21 +9,21 @@ class SeccionTaller extends Model
 {
     use HasFactory;
 
-    protected $table = 'seccion_tallers';
+    protected $table = 'secciones_taller';
 
     protected $fillable = [
         'taller_id',
-        'nombre',
-        'descripcion',
-        'orden',
-        'tipo', // lectura, actividad, test
+        'tipo',
+        'titulo',
         'contenido',
         'opciones',
         'respuesta_correcta',
     ];
 
     protected $casts = [
+        'contenido' => 'array',
         'opciones' => 'array',
+        'respuesta_correcta' => 'array',
     ];
 
     public function taller()

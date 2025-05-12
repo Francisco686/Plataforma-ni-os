@@ -72,3 +72,18 @@ Route::middleware(['auth'])->group(function () {
     // Respuestas
     Route::post('/respuestas', [RespuestasController::class, 'store'])->name('respuestas.store');
 });
+
+    //Zona de juegos
+    Route::get('/juegos', function () {return view('juegos.index');
+    })->name('juegos.index');
+
+
+
+
+Route::get('/storage/materiales/{filename}', function ($filename) {
+    $path = storage_path('app/public/materiales/' . $filename);
+    if (!file_exists($path)) {
+        abort(404, 'El archivo no existe');
+    }
+    return response()->file($path);
+});

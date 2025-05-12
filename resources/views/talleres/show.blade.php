@@ -1,67 +1,105 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="text-center fw-bold mb-4 text-success">Ambiente</h2>
-    <p class="text-center text-muted mb-5">el ambiente, para los servicios</p>
+    <div class="container py-5">
+        <div class="mb-3">
+            <a href="{{ route('talleres.index') }}" class="btn btn-secondary">
+                ← Regresar a Talleres
+            </a>
+        </div>
 
-    <h4 class="fw-semibold mb-4 text-primary">Secciones del Taller</h4>
+        <h2 class="text-center mb-4">Taller: <span class="text-primary">{{ $taller->titulo }}</span></h2>
 
-    @foreach ($taller->secciones as $seccion)
-        <div class="card mb-4 shadow-sm rounded-4">
-            <div class="card-body">
-                <h5 class="card-title">Cuestionario</h5>
 
-                @if($seccion->tipo === 'texto')
-                    <p><strong>Tipo:</strong> Texto</p>
-                    <p>{{ $seccion->contenido }}</p>
 
-                @elseif($seccion->tipo === 'actividad')
-                    <p><strong>Tipo:</strong> Actividad</p>
-                    <p>{{ $seccion->contenido }}</p>
+        <div class="row justify-content-center">
+            <div class="col-12">
 
-                @elseif($seccion->tipo === 'test')
-                    <form action="{{ route('respuestas.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="seccion_id" value="{{ $seccion->id }}">
-
-                        <p><strong>Tipo:</strong> Test</p>
-                        <p>responde cuidadosamente ✨</p>
-
-                        <p class="fw-semibold">Pregunta:</p>
-                        <p>{{ $seccion->contenido }}</p>
-
-                        @php
-                            $opciones = json_decode($seccion->opciones, true);
-                        @endphp
-
-                        @foreach($opciones as $i => $opcion)
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio"
-                                    name="respuesta"
-                                    id="opcion{{ $seccion->id }}_{{ $i }}"
-                                    value="{{ $opcion }}" required>
-                                <label class="form-check-label" for="opcion{{ $seccion->id }}_{{ $i }}">
-                                    {{ $opcion }}
-                                </label>
-                            </div>
-                        @endforeach
-
-                        <div class="mt-3 text-end">
-                            <button type="submit" class="btn btn-success rounded-pill px-4">
-                                Enviar
-                            </button>
-                        </div>
-                    </form>
+            @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                 @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @foreach ($taller->secciones as $seccion)
+                    <div class="card shadow rounded-4 mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ $seccion->titulo }}</h3>
+                            <p class="text-muted">Tipo: {{ ucfirst($seccion->tipo) }}</p>
+
+                            @if ($seccion->tipo === 'lectura' || $seccion->tipo === 'actividad')
+                                <div class="mb-3">
+                                    <h5>Contenido</h5>
+                                    <p>{{ $seccion->contenido }}</p>
+                                </div>
+                            @elseif ($seccion->tipo === 'test')
+                                <div class="mb-3">
+                                    <h5>Preguntas</h5>
+                                    @php
+                                        // Usar json_decode para compatibilidad con datos JSON
+                                        $preguntas = json_decode($seccion->contenido ?? '[]', true);
+                                        $opciones = json_decode($seccion->opciones ?? '[]', true);
+                                        $respuestas = \App\Models\RespuestaAlumno::where('seccion_id', $seccion->id)
+                                            ->where('user_id', Auth::id())
+                                            ->get();
+                                        $correctas = $respuestas->where('es_correcta', true)->count();
+                                        $total = $respuestas->count();
+                                        \Illuminate\Support\Facades\Log::debug('Datos en talleres/show.blade.php', [
+                                            'seccion_id' => $seccion->id,
+                                            'titulo' => $seccion->titulo,
+                                            'preguntas' => $preguntas,
+                                            'opciones' => $opciones,
+                                        ]);
+                                    @endphp
+
+                                    @if ($respuestas->isNotEmpty())
+                                        <p><strong>Calificación:</strong> {{ $correctas }}/{{ $total }} ({{ $total > 0 ? ($correctas / $total) * 100 : 0 }}%)</p>
+                                    @else
+                                        @if (is_array($preguntas) && is_array($opciones) && !empty($preguntas) && !empty($opciones))
+                                            <form action="{{ route('respuestas.store') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="seccion_id" value="{{ $seccion->id }}">
+
+                                                @foreach ($opciones as $index => $pregunta)
+                                                    <div class="mb-4">
+                                                        <p><strong>Pregunta {{ $index + 1 }}:</strong> {{ $pregunta['contenido'] ?? 'Pregunta no disponible' }}</p>
+                                                        @if (isset($pregunta['opciones']) && is_array($pregunta['opciones']))
+                                                            @foreach ($pregunta['opciones'] as $opcionIndex => $opcion)
+                                                                <div class="form-check">
+                                                                    <input type="radio" name="respuesta[{{ $index }}]" value="{{ $opcionIndex }}"
+                                                                           class="form-check-input" id="opcion{{ $seccion->id }}_{{ $index }}_{{ $opcionIndex }}"
+                                                                           required>
+                                                                    <label class="form-check-label" for="opcion{{ $seccion->id }}_{{ $index }}_{{ $opcionIndex }}">
+                                                                        {{ $opcion }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        @else
+                                                            <p class="text-danger">No hay opciones disponibles para esta pregunta.</p>
+                                                        @endif
+                                                        @error("respuesta.{$index}")
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                @endforeach
+
+                                                <button type="submit" class="btn btn-primary mt-2">Enviar Respuestas</button>
+                                            </form>
+                                        @else
+                                            <p class="text-danger">No hay preguntas disponibles para este test.</p>
+                                        @endif
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-    @endforeach
-
-    <div class="text-center mt-4">
-        <a href="{{ route('talleres.index') }}" class="btn btn-secondary px-4">
-            ← Regresar
-        </a>
     </div>
-</div>
 @endsection
