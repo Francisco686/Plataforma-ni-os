@@ -10,39 +10,27 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
-        'curp',
         'role',
         'password',
+        'password_visible',
+        'grupo_id',
     ];
+    
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'password' => 'hashed',
         ];
     }
+<<<<<<< HEAD
     // En app/Models/Taller.php
     public function talleresAsignados()
     {
@@ -50,4 +38,54 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+=======
+    public function talleres()
+    {
+    return $this->belongsToMany(Taller::class, 'alumno_taller');
+    }
+
+    public function respuestas()
+{
+    return $this->hasMany(\App\Models\RespuestaAlumno::class);
+}
+
+    public function grupo()
+    {
+        return $this->belongsTo(Group::class, 'grupo_id');
+    }
+    
+    public function isDocente()
+    {
+        return $this->role === 'docente';
+    }
+
+    public function isAlumno()
+    {
+        return $this->role === 'alumno';
+    }
+
+    public function talleresAsignados()
+    {
+        return $this->hasMany(AsignaTaller::class);
+    }
+
+    // Asignar automáticamente los talleres base a los alumnos
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if ($user->role === 'alumno') {
+                $talleres = \App\Models\Taller::all();
+
+                foreach ($talleres as $taller) {
+                    \App\Models\AsignaTaller::firstOrCreate([
+                        'user_id' => $user->id,
+                        'taller_id' => $taller->id,
+                    ], [
+                        'fecha_inicio' => now(),
+                    ]);
+                }
+            }
+        });
+    }
+>>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
 }

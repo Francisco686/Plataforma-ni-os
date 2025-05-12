@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Taller;
 use App\Models\User;
-use App\Models\AsignaTaller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TallerController extends Controller
 {
+    /**
+     * Muestra la vista principal con los talleres y alumnos asignables.
+     */
     public function index()
     {
+<<<<<<< HEAD
         $user = auth()->user();
 
         if($user->role === 'administrador') {
@@ -34,64 +39,104 @@ class TallerController extends Controller
                 'talleres' => $talleres,
                 'userId' => $user->id,
             ]);
+=======
+        if (Auth::user()->isDocente()) {
+            // Docente: puede ver todos sus alumnos y talleres
+            $alumnos = User::where('role', 'alumno')
+                ->where('grupo_id', Auth::user()->grupo_id)
+                ->with('grupo')
+                ->get();
+    
+            $talleres = Taller::with('alumnos')->latest()->get();
+    
+            return view('talleres.talleres', compact('alumnos', 'talleres'));
+>>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
         }
+    
+        // Alumno: solo ve los talleres que tiene asignados
+        $talleres = Auth::user()->talleres()->with('secciones')->get();
+    
+        return view('talleres.mis_talleres', compact('talleres'));
     }
+    
 
-    public function create()
-    {
-        // Verificación simple del rol
-        if (auth()->user()->role !== 'administrador') {
-            abort(403, 'Esta acción no está autorizada');
-        }
-
-        return view('talleres.create');
-    }
-
-
+    /**
+     * Almacena un nuevo taller y lo asigna a alumnos.
+     */
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'administrador') {
-            abort(403, 'Esta acción no está autorizada');
-        }
-
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'destinatarios' => 'required|array',
+            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        Taller::create($validated);
+        $rutaArchivo = null;
 
-        return redirect()->route('talleres.index')
-            ->with('success', 'Taller creado exitosamente');
+        if ($request->hasFile('archivo')) {
+            $rutaArchivo = $request->file('archivo')->store('materiales', 'public');
+        }
+
+        $taller = Taller::create([
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'materiales' => $rutaArchivo,
+        ]);
+
+        $destinos = $request->destinatarios;
+
+        if (in_array('all', $destinos)) {
+            $destinos = User::where('role', 'alumno')
+                ->where('grupo_id', Auth::user()->grupo_id)
+                ->pluck('id')
+                ->toArray();
+        }
+
+        $taller->alumnos()->attach($destinos);
+
+        return back()->with('success', 'Taller creado y asignado correctamente.');
     }
 
+    /**
+     * Muestra el formulario de edición de un taller.
+     */
     public function edit(Taller $taller)
     {
-        if (auth()->user()->role !== 'administrador') {
-            abort(403, 'Esta acción no está autorizada');
-        }
-
-        return view('talleres.edit', compact('taller'));
+        $alumnos = User::where('role', 'alumno')->with('grupo')->get();
+        return view('talleres.edit', compact('taller', 'alumnos'));
     }
 
-
+    /**
+     * Actualiza los datos de un taller (incluyendo archivo si se cambia).
+     */
     public function update(Request $request, Taller $taller)
     {
-        if (auth()->user()->role !== 'administrador') {
-            abort(403, 'Esta acción no está autorizada');
-        }
-
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        $taller->update($validated);
+        $data = [
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+        ];
 
-        return redirect()->route('talleres.index')
-            ->with('success', 'Taller actualizado exitosamente');
+        if ($request->hasFile('archivo')) {
+            if ($taller->materiales && Storage::disk('public')->exists($taller->materiales)) {
+                Storage::disk('public')->delete($taller->materiales);
+            }
+
+            $data['materiales'] = $request->file('archivo')->store('materiales', 'public');
+        }
+
+        $taller->update($data);
+
+        return redirect()->route('talleres.index')->with('success', 'Taller actualizado correctamente.');
     }
 
+<<<<<<< HEAD
 
     public function asignar()
     {
@@ -135,21 +180,44 @@ class TallerController extends Controller
 
         return view('talleres.show', compact('taller', 'usuariosNoAsignados'));
     }
+=======
+    /**
+     * Elimina un taller, su archivo y sus asignaciones.
+     */
+>>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
     public function destroy(Taller $taller)
     {
-        if (auth()->user()->role !== 'administrador') {
-            abort(403, 'Esta acción no está autorizada');
+        // Eliminar relaciones con alumnos (pivot)
+        $taller->alumnos()->detach();
+    
+        // Eliminar asignaciones si usas modelo AsignaTaller
+        \App\Models\AsignaTaller::where('taller_id', $taller->id)->delete();
+    
+        // Eliminar archivo si existe
+        if ($taller->materiales && Storage::disk('public')->exists($taller->materiales)) {
+            Storage::disk('public')->delete($taller->materiales);
         }
-
+    
+        // Ahora sí eliminar el taller
         $taller->delete();
-
-        return redirect()->route('talleres.index')->with('success', 'Taller eliminado correctamente');
+    
+        return redirect()->route('talleres.index')->with('success', 'Taller eliminado correctamente.');
     }
+<<<<<<< HEAD
     public function destroyAsignacion(Taller $taller, User $usuario)
     {
         $taller->usuariosAsignados()->detach($usuario->id);
 
         return back()->with('success', 'Usuario removido del taller correctamente');
     }
+=======
+    public function show(Taller $taller)
+{
+    $taller->load('secciones');
+>>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
 
+    return view('talleres.show', compact('taller'));
+}
+
+    
 }

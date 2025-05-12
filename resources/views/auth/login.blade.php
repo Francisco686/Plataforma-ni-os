@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card o-hidden border-0 shadow-lg">
+<div class="card o-hidden border-0 shadow-lg" style="max-height: 560px;">
     <div class="card-body p-4">
         <div class="text-center mb-3">
             <h1 class="h4 text-gray-900">Iniciar Sesión</h1>
@@ -21,16 +21,16 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}">|
             @csrf
 
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
-                    <input type="text" name="curp" id="curp" class="form-control" placeholder="CURP" required minlength="18" maxlength="18"
-                           pattern="[A-Z0-9]{18}" title="Debe contener 18 caracteres en mayúsculas y sin espacios">
+                    <input type="text" name="name" id="name" class="form-control"
+                           placeholder="Nombre del alumno" required>
                 </div>
             </div>
 
@@ -39,7 +39,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                     </div>
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Contraseña" required>
+                    <input type="password" name="password" id="password" class="form-control"
+                           placeholder="Contraseña" required>
                 </div>
             </div>
 

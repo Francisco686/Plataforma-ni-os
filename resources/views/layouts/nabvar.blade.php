@@ -21,7 +21,7 @@
         }
 
         .navbar-custom {
-            background-color: rgba(0, 128, 0, 0.9); /* verde con opacidad */
+            background-color: rgba(0, 128, 0, 0.9);
         }
 
         .navbar-custom .navbar-brand,
@@ -36,13 +36,14 @@
         }
 
         main {
-            padding-top: 80px; /* espacio para navbar fija */
+            padding-top: 80px;
         }
     </style>
 
     @yield('styles')
 </head>
 <body>
+
 <!-- Barra de navegación superior -->
 <nav class="navbar navbar-expand-lg navbar-custom fixed-top shadow">
     <div class="container-fluid">
@@ -52,54 +53,81 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon text-white"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                @if(Auth::user()->role === 'administrador')
+
+                @auth
+                    {{-- Alumno --}}
+                    @if(Auth::user()->isAlumno())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('talleres.index') }}">
+                                <i class="fas fa-book me-1"></i> Mis Talleres
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-star me-1"></i> Logros
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-comments me-1"></i> Foro
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-gamepad me-1"></i> Zona de Juegos
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Docente --}}
+                    @if(Auth::user()->isDocente())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('evaluaciones.index') }}">
+                                <i class="fas fa-edit me-1"></i> Evaluaciones
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('alumnos.index') }}">
+                                <i class="fas fa-users me-1"></i> Mis Alumnos
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Administrador --}}
+                    @if(Auth::user()->role === 'administrador')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('talleres.index') }}">
+                                <i class="fas fa-tools me-1"></i> Talleres
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Cerrar sesión --}}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('talleres.index') }}"><i class="fas fa-tools me-1"></i> Talleres</a>
+                        <a class="nav-link" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('talleres.index') }}"><i class="fas fa-book me-1"></i> Mis Talleres</a>
-                    </li>
-                @endif
+                @endauth
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-edit me-1"></i> Evaluaciones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-gamepad me-1"></i> Zona de Juegos</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-star me-1"></i> Logros</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-comments me-1"></i> Foro</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- Espacio para contenido específico -->
+<!-- Contenido -->
 <main>
     @yield('content')
 </main>
 
-<!-- Scripts necesarios -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @yield('scripts')
 </body>

@@ -16,6 +16,10 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+    public function username()
+{
+    return 'name';
+}
 
     /**
      * Muestra el formulario de registro.
@@ -30,47 +34,54 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // Validación de datos
         $request->validate([
-            'role' => 'required|in:alumno,docente',
             'name' => 'required|string|max:255',
-            'curp' => 'required|string|size:18|unique:users,curp|regex:/^[A-Z0-9]{18}$/',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Crear usuario
         $user = new User();
-        $user->role = $request->role;
+        $user->role = 'docente'; // Siempre asigna "docente"
         $user->name = $request->name;
+<<<<<<< HEAD
         $user->gmail= strtoupper($request->gmail);
+=======
+>>>>>>> e457cad67fa8f1f6e32c48ab7123547bc7c746de
         $user->password = Hash::make($request->password);
+        $user->password_visible = $request->password;
         $user->save();
 
-        // Iniciar sesión automáticamente después del registro
         Auth::login($user);
 
         return redirect()->route('home')->with('success', 'Registro exitoso.');
     }
 
     /**
-     * Maneja el login de usuarios con CURP y contraseña.
+     * Maneja el login de usuarios por nombre y contraseña visible o hash.
      */
     public function login(Request $request)
     {
         $request->validate([
-            'curp' => 'required|string|size:18|regex:/^[A-Z0-9]{18}$/',
+            'name' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt(['curp' => strtoupper($request->curp), 'password' => $request->password])) {
+        $nameInput = trim(strtolower($request->name));
+
+        $user = User::get()->first(function ($u) use ($nameInput, $request) {
+            return strtolower(trim($u->name)) === $nameInput &&
+                   ($u->password_visible === $request->password || Hash::check($request->password, $u->password));
+        });
+
+        if ($user) {
+            Auth::login($user);
             return redirect()->route('home')->with('success', 'Inicio de sesión exitoso.');
         }
 
-        return back()->withErrors(['curp' => 'Credenciales incorrectas.'])->withInput();
+        return back()->withErrors(['name' => 'Nombre o contraseña incorrectos.'])->withInput();
     }
 
     /**
-     * Maneja el logout.
+     * Cierra sesión.
      */
     public function logout()
     {
