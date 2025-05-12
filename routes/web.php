@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\SeccionController;
+use App\Http\Controllers\ReutilizarController;
 
 
 
@@ -34,10 +35,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/talleres/{taller}', [TallerController::class, 'update'])->name('talleres.update');
     Route::get('/talleres/asignar', [TallerController::class, 'asignar'])->name('talleres.asignar');
     Route::post('/talleres/asignar', [TallerController::class, 'storeAsignacion'])->name('talleres.asignar.store');
-    Route::get('/talleres/{taller}', [TallerController::class, 'show'])->name('talleres.ver');
-    Route::get('/taller/{id}', [TallerController::class, 'verTaller'])->name('talleres.ver');
     Route::delete('/talleres/{taller}', [TallerController::class, 'destroy'])->name('talleres.destroy');
     Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
+
+    Route::delete('/talleres/{taller}/asignar/{usuario}', [TallerController::class, 'destroyAsignacion'])
+        ->name('talleres.asignar.destroy');
 
 
     Route::get('/secciones/{seccion}/edit', [SeccionController::class, 'edit'])->name('secciones.edit');
@@ -45,4 +47,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/secciones/{seccion}', [SeccionController::class, 'destroy'])->name('secciones.destroy');
 
     Route::post('/taller/completar', [TallerController::class, 'completarSeccion'])->name('talleres.completar');
+
+    //Reutilizar
+    Route::get('/reutilizar/{taller}', [ReutilizarController::class, 'index'])->name('reutilizar.index');
+
+    //secciones
+    Route::get('/seccion/{id}/seccion/1', [ReutilizarController::class, 'Seccion1'])->name('seccion.1');
+    Route::post('/actividad/{id}/guardar', [App\Http\Controllers\ReutilizarController::class, 'guardarActividad'])->name('actividad.guardar');
+
+    Route::get('/seccion/{id}/seccion/2', [ReutilizarController::class, 'Seccion2'])->name('seccion.2');
+// Agrega más según necesites
+
 });

@@ -20,6 +20,11 @@ class Taller extends Model
     {
         return $this->hasMany(SeccionTaller::class);
     }
+    public function usuariosAsignados()
+    {
+        return $this->belongsToMany(User::class, 'asigna_tallers', 'taller_id', 'user_id')
+            ->withTimestamps();
+    }
 
     public function progresoCompletado($asignaId)
     {

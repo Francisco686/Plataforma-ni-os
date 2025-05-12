@@ -43,46 +43,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    /**
-     * Relación con los talleres asignados
-     */
+    // En app/Models/Taller.php
     public function talleresAsignados()
     {
         return $this->belongsToMany(Taller::class, 'asigna_tallers', 'user_id', 'taller_id')
-            ->withPivot('fecha_inicio')
-            ->using(AsignaTaller::class);
+            ->withTimestamps();
     }
 
-    /**
-     * Relación con las asignaciones de talleres
-     */
-    public function asignaciones()
-    {
-        return $this->hasMany(AsignaTaller::class, 'user_id');
-    }
-
-    /**
-     * Verifica si el usuario es administrador
-     */
-    public function isAdmin()
-    {
-        return $this->role === 'administrador';
-    }
-
-    /**
-     * Verifica si el usuario es docente
-     */
-    public function isDocente()
-    {
-        return $this->role === 'docente';
-    }
-
-    /**
-     * Verifica si el usuario es alumno
-     */
-    public function isAlumno()
-    {
-        return $this->role === 'alumno';
-    }
 }

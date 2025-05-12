@@ -18,12 +18,12 @@
             background-image: url("{{ asset('img/fondo2.png') }}");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: 1550px 710px; /* tamaño exacto que quieres */
+            background-size: 1550px 750px; /* tamaño exacto que quieres */
         }
 
         .contenido-centro {
             position: absolute;
-            top: 43%;
+            top: 44%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
@@ -31,7 +31,7 @@
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
-            max-width: 490px;
+            max-width: 480px;
         }
 
         .login-overlay .card {

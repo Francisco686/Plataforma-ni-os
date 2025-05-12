@@ -59,18 +59,19 @@
                                 </div>
                             @endif
 
+
                             <div class="d-flex justify-content-center flex-wrap gap-2 mt-3">
-                                <a href="{{ route('talleres.ver', $taller->id) }}"
-                                   class="btn btn-outline-primary mt-2 mr-2 px-4 py-2">
-                                    <i class="fas fa-door-open mr-2"></i> Entrar
-                                </a>
-
-                                @if(auth()->user()->role === 'administrador')
-                                    <a href="{{ route('talleres.edit', $taller->id) }}"
-                                       class="btn btn-outline-secondary mt-2 px-4 py-2">
-                                        <i class="fas fa-edit mr-2"></i> Editar
+                                @if(auth()->user()->role === 'alumno')
+                                    <a href="{{ route('reutilizar.index', $taller->id) }}"
+                                       class="btn btn-outline-primary mt-2 mr-2 px-4 py-2">
+                                        <i class="fas fa-door-open mr-2"></i> Entrar
                                     </a>
-
+                                @endif
+                            @if(auth()->user()->role === 'administrador')
+                                        <a href="{{ route('talleres.edit', $taller->id) }}"
+                                           class="btn btn-outline-secondary mt-2 px-4 py-2">
+                                            <i class="fas fa-edit mr-2"></i> Editar
+                                        </a>
                                     <button class="btn btn-outline-info mt-2 px-4 py-2" data-bs-toggle="modal" data-bs-target="#seccionesModal{{ $taller->id }}">
                                         <i class="fas fa-list-ul mr-2"></i> Secciones
                                     </button>
@@ -93,34 +94,90 @@
                     </div>
                 </div>
 
+                <!-- Modal Asignar Taller - Versión mejorada -->
                 <!-- Modal Asignar Taller -->
                 @if(auth()->user()->role === 'administrador')
                     <div class="modal fade" id="asignarModal{{ $taller->id }}" tabindex="-1" aria-labelledby="asignarModalLabel{{ $taller->id }}" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-lg">
                             <div class="modal-content">
-                                <form action="{{ route('talleres.asignar.store') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="taller_id" value="{{ $taller->id }}">
-                                    <div class="modal-header bg-success text-white">
-                                        <h5 class="modal-title" id="asignarModalLabel{{ $taller->id }}">Asignar Taller: {{ $taller->nombre }}</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="user_id" class="form-label">Seleccionar Usuario</label>
-                                            <select name="user_id" class="form-select" required>
-                                                <option value="" disabled selected>-- Selecciona un usuario --</option>
-                                                @foreach($usuarios as $usuario)
-                                                    <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                                                @endforeach
-                                            </select>
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title" id="asignarModalLabel{{ $taller->id }}">
+                                        <i class="fas fa-users me-2"></i>Gestión de Usuarios: {{ $taller->nombre }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Listado de usuarios asignados -->
+                                    <div class="mb-4">
+                                        <h6 class="fw-bold mb-3"><i class="fas fa-user-check me-2"></i>Usuarios Asignados</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Curp</th>
+                                                    <th>Rol</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @forelse($taller->usuariosAsignados ?? [] as $usuario)
+                                                    <tr>
+                                                        <td>{{ $usuario->name }}</td>
+                                                        <td>{{ $usuario->curp }}</td>
+                                                        <td>{{ ucfirst($usuario->role) }}</td>
+                                                        <td>
+                                                            <form action="{{ route('talleres.asignar.destroy', ['taller' => $taller->id, 'usuario' => $usuario->id]) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                                        title="Eliminar asignación"
+                                                                        onclick="return confirm('¿Quitar a {{ $usuario->name }} de este taller?')">
+                                                                    <i class="fas fa-user-minus"></i> Quitar
+                                                                </button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4" class="text-center text-muted">No hay usuarios asignados a este taller</td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-success">Asignar</button>
-                                    </div>
-                                </form>
+
+                                    <!-- Formulario para asignar nuevo usuario -->
+                                    <hr>
+                                    <h6 class="fw-bold mb-3"><i class="fas fa-user-plus me-2"></i>Asignar Nuevo Usuario</h6>
+                                    <form action="{{ route('talleres.asignar.store') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="taller_id" value="{{ $taller->id }}">
+
+                                        <div class="row g-3 align-items-end">
+                                            <div class="col-md-8">
+                                                <label for="user_id" class="form-label">Seleccionar Usuario</label>
+                                                <select name="user_id" class="form-select" required>
+                                                    <option value="" disabled selected>Selecciona un alumno</option>
+                                                    @foreach($taller->usuariosNoAsignados ?? [] as $usuario)
+                                                        <option value="{{ $usuario->id }}">
+                                                            {{ $usuario->name }} {{ $usuario->email }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="submit" class="btn btn-success w-100">
+                                                    <i class="fas fa-user-plus me-1"></i> Asignar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -157,11 +214,11 @@
                                                         <td>{{ $seccion->orden }}</td>
                                                         <td>
                                                             <div class="d-flex gap-2">
-                                                                <a href="{{ route('secciones.edit', $seccion->id) }}"
-                                                                   class="btn btn-sm btn-outline-warning"
-                                                                   title="Editar">
+                                                                <button onclick="toggleEditForm('editSeccionForm{{ $seccion->id }}', this)"
+                                                                        class="btn btn-sm btn-outline-warning"
+                                                                        title="Editar">
                                                                     <i class="fas fa-edit"></i>
-                                                                </a>
+                                                                </button>
                                                                 <form action="{{ route('secciones.destroy', $seccion->id) }}" method="POST"
                                                                       onsubmit="return confirm('¿Estás seguro de eliminar esta sección?')">
                                                                     @csrf
@@ -171,6 +228,38 @@
                                                                     </button>
                                                                 </form>
                                                             </div>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Formulario de edición (oculto inicialmente) -->
+                                                    <tr id="editSeccionForm{{ $seccion->id }}" style="display: none;">
+                                                        <td colspan="4">
+                                                            <form action="{{ route('secciones.update', $seccion->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-4">
+                                                                        <label for="nombre" class="form-label">Nombre</label>
+                                                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ $seccion->nombre }}" required>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <label for="orden" class="form-label">Orden</label>
+                                                                        <input type="number" class="form-control" id="orden" name="orden" min="1" value="{{ $seccion->orden }}" required>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label for="descripcion" class="form-label">Descripción</label>
+                                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="1">{{ $seccion->descripcion }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                                            onclick="toggleEditForm('editSeccionForm{{ $seccion->id }}', this)">
+                                                                        Cancelar
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-sm btn-info">
+                                                                        <i class="fas fa-save me-1"></i> Guardar Cambios
+                                                                    </button>
+                                                                </div>
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -212,7 +301,6 @@
                                             </div>
 
                                             <div class="d-flex justify-content-end gap-2 mt-3">
-
                                                 <button type="submit" class="btn btn-info btn-sm">
                                                     <i class="fas fa-save me-1"></i> Guardar Sección
                                                 </button>
@@ -251,6 +339,28 @@
                     button.classList.add('btn-success');
                 }
             }
+
+            function toggleEditForm(formId, button) {
+                const form = document.getElementById(formId);
+                if (form.style.display === 'none') {
+                    // Oculta todos los demás formularios de edición primero
+                    document.querySelectorAll('[id^="editSeccionForm"]').forEach(el => {
+                        if (el.id !== formId) el.style.display = 'none';
+                    });
+
+                    form.style.display = 'table-row';
+                    // Cambia el ícono del botón a un check (opcional)
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    button.classList.remove('btn-outline-warning');
+                    button.classList.add('btn-outline-success');
+                } else {
+                    form.style.display = 'none';
+                    // Restaura el ícono original
+                    button.innerHTML = '<i class="fas fa-edit"></i>';
+                    button.classList.remove('btn-outline-success');
+                    button.classList.add('btn-outline-warning');
+                }
+            }
         </script>
     @endsection
 
@@ -276,6 +386,15 @@
             }
             .table-hover tbody tr:hover {
                 background-color: rgba(13, 202, 240, 0.1);
+            }
+            /* Estilo para el formulario de edición */
+            [id^="editSeccionForm"] {
+                background-color: #f8f9fa;
+            }
+            [id^="editSeccionForm"] td {
+                padding: 15px;
+                border-top: 2px solid #dee2e6;
+                border-bottom: 2px solid #dee2e6;
             }
         </style>
     @endsection

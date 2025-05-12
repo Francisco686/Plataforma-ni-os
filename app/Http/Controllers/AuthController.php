@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user = new User();
         $user->role = $request->role;
         $user->name = $request->name;
-        $user->curp = strtoupper($request->curp);
+        $user->gmail= strtoupper($request->gmail);
         $user->password = Hash::make($request->password);
         $user->save();
 
