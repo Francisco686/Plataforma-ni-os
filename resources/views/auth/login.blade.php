@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Iniciar Sesión - Plataforma Educativa Ambiental')
-@section('meta_description', 'Accede a la plataforma educativa interactiva sobre conciencia ambiental para niños de primaria.')
-@section('meta_keywords', 'iniciar sesión, plataforma niños, conciencia ambiental, educación primaria, ecología')
-
 @section('content')
+<div style="width: 100%; background-color: #0d6efd; color: white; text-align: center; padding: 12px 10px; font-weight: bold; font-size: 1.1rem; margin-top: 8px; border-radius: 8px;">
+    Título: Iniciar Sesión - Plataforma Educativa Ambiental
+</div>
+<div style="width: 100%; background-color: #198754; color: white; text-align: center; padding: 12px 10px; font-size: 1rem; margin-bottom: 8px; border-radius: 8px;">
+    Descripción: Accede a la plataforma educativa interactiva sobre conciencia ambiental para niños de primaria.
+</div>
+<div style="width: 100%; background-color: #6c757d; color: white; text-align: center; padding: 12px 10px; font-size: 0.95rem; margin-bottom: 15px; border-radius: 8px;">
+    Palabras clave: iniciar sesión, plataforma niños, conciencia ambiental, educación primaria, ecología
+</div>
+
 <div class="card o-hidden border-0 shadow-lg" style="max-height: 560px;">
     <div class="card-body p-4">
         <div class="text-center mb-3">
@@ -66,6 +72,7 @@
         </div>
     </div>
 </div>
+
 <div style="width: 100%; background-color: #0d6efd; color: white; text-align: center; padding: 12px 10px; font-weight: bold; font-size: 1.1rem; margin-top: 8px; margin-bottom: 20px; border-radius: 8px;">
     Autor: Juan Francisco Jiménez Garduño - TESVB
 </div>
