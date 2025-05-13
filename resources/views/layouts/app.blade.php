@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <title>Iniciar Sesión - Plataforma Educativa Ambiental</title>
+<meta name="description" content="Accede a la plataforma educativa interactiva sobre conciencia ambiental para niños de primaria.">
+<meta name="keywords" content="iniciar sesión, plataforma niños, conciencia ambiental, educación primaria, ecología">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Plataforma</title>
