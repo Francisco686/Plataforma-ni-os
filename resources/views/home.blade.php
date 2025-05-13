@@ -651,4 +651,10 @@
             });
         });
     </script>
+    <div style="width: 100%; background-color: #0d6efd; color: white; text-align: center; padding: 12px 10px; font-weight: bold; font-size: 1.1rem; margin-top: -10px; margin-bottom: 20px; border-radius: 8px;">
+    Autor: Juan Francisco Jiménez Garduño - TESVB
+</div>
+
+
+
 @endsection
