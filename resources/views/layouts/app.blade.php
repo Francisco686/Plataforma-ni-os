@@ -31,7 +31,7 @@
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
-            max-width: 980px;
+            max-width: 680px;
         }
 
         .login-overlay .card {

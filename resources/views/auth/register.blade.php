@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-10">
             <div class="card shadow rounded-4">
                 <div class="card-header bg-success text-white text-center">
                     <h4>Crear Cuenta Docente</h4>

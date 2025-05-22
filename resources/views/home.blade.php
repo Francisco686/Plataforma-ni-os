@@ -87,6 +87,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="reciclaje-tab" data-bs-toggle="tab" href="#tab-reciclaje" role="tab">Reciclaje</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="reutilizar-tab" data-bs-toggle="tab" href="#tab-reutilizar" role="tab">Reutilizar</a>
+                                </li>
                             </ul>
 
                             <div class="tab-content" id="alumnoTabContent">
@@ -322,6 +325,224 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <!-- Pestaña Reutilizar -->
+                                <div class="tab-pane fade" id="tab-reutilizar" role="tabpanel">
+                                    <!-- Sección de bienvenida (faltaba esta parte) -->
+                                    <section id="seccion-bienvenida-reutilizar" class="mb-5 scroll-margin-top" style="scroll-margin-top: 100px;">
+                                        <div class="card bg-white text-dark p-4 shadow">
+                                            <h4 class="fw-bold">Bienvenido a la sección de Reutilizar</h4>
+                                            <p>Conoce cómo darle nueva vida a objetos que ya no usas.</p>
+                                        </div>
+                                    </section>
+
+
+                                    <div class="animate__animated animate__fadeIn">
+                                        <!-- Historia -->
+                                        <section id="seccion-cuento-reutilizar" class="row mb-4 scroll-margin-top" style="scroll-margin-top: 100px;">
+                                            <div class="col-12">
+                                                <div class="card bg-white text-dark p-4 shadow">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="fas fa-recycle fa-2x me-3 text-success"></i>
+                                                        <h4 class="mb-0 fw-bold">Historia: “Tomás y el Tesoro del Reciclaje”</h4>
+                                                    </div>
+                                                    <div class="px-4">
+                                                        <p class="lead">Tomás era un niño curioso que un día encontró un mapa en su jardín con un mensaje que decía:
+                                                            "Sigue las pistas y encuentra el tesoro que salva al planeta". Al llegar al parque, encontró un bote de
+                                                            reciclaje donde una botella le habló y le explicó que si la reciclaban, podría tener una nueva vida y no
+                                                            contaminar el planeta. Desde entonces, Tomás entendió que el verdadero tesoro era el reciclaje, porque
+                                                            ayudaba a cuidar la Tierra, y enseñó a sus amigos a separar la basura y a reutilizar los materiales.</p>
+                                                        <p> Con unas botellas vacías, un cartón viejo y mucha imaginación, Tomás y sus amigos construyeron un divertido
+                                                            juego de bolos en lugar de tirarlos a la basura. Aprendieron que reciclar no solo ayuda al planeta,
+                                                            ¡también puede ser muy divertido!.</p>
+                                                        <p class="fw-bold text-success">Moraleja: Antes de tirar algo, piensa cómo podrías reutilizarlo.</p>
+                                                        <div class="text-center mt-3">
+                                                            <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1350&q=80" alt="Juguetes reutilizados" class="img-fluid rounded" style="max-height: 200px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Datos Curiosos -->
+                                        <section id="seccion-datos-reutilizar" class="row mb-5 scroll-margin-top" style="scroll-margin-top: 100px;">
+                                            <div class="col-12">
+                                                <div class="card bg-white text-dark p-4 shadow">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="fas fa-lightbulb fa-2x me-3 text-warning"></i>
+                                                        <h4 class="mb-0 fw-bold">Datos Curiosos sobre Reutilización</h4>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="p-3 bg-light rounded mb-3 border-start border-4 border-warning">
+                                                                <h5 class="fw-bold text-warning">♻️ ¿Sabías que?</h5>
+                                                                <p>Reutilizar 1 kg de plástico ahorra la energía equivalente a 3 horas de televisión.</p>
+                                                            </div>
+                                                            <div class="p-3 bg-light rounded mb-3 border-start border-4 border-info">
+                                                                <h5 class="fw-bold text-info">💰 Ahorro increíble</h5>
+                                                                <p>Una familia promedio puede ahorrar $1,000 al año reutilizando objetos en lugar de comprar nuevos.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="p-3 bg-light rounded mb-3 border-start border-4 border-success">
+                                                                <h5 class="fw-bold text-success">🌳 Beneficio ambiental</h5>
+                                                                <p>Reutilizar una camiseta vieja como trapo evita la emisión de 4 kg de CO₂.</p>
+                                                            </div>
+                                                            <div class="p-3 bg-light rounded mb-3 border-start border-4 border-danger">
+                                                                <h5 class="fw-bold text-danger">🧠 Creatividad</h5>
+                                                                <p>Los niños que aprenden a reutilizar desarrollan un 30% más su creatividad según estudios.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section id="seccion-multimedia" class="row scroll-margin-top mb-5" style="scroll-margin-top: 100px;">
+                                            <div class="col-12">
+                                                <div class="card bg-white p-4 shadow">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="fas fa-photo-video fa-2x me-3 text-primary"></i>
+                                                        <h4 class="mb-0 fw-bold">Galería y Videos Educativos</h4>
+                                                    </div>
+                                                    <div class="row g-4">
+                                                        <!-- Mitad imágenes -->
+                                                        <div class="col-md-6">
+                                                            <!-- HTML -->
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar2.png') }}"
+                                                                         alt="Reutilizar 2"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="Reutiliza materiales en casa">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar3.jpg') }}"
+                                                                         alt="Reutilizar 3"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="Haz manualidades con botellas">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar4.jpg') }}"
+                                                                         alt="Niño tomando agua"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="El agua nos da vida">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar5.jpg') }}"
+                                                                         alt="Ahorrando agua"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="Todos podemos ayudar">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar6.jpg') }}"
+                                                                         alt="Niño tomando agua"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="El agua nos da vida">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <img src="{{ asset('assets/images/reutilizar7.jpg') }}"
+                                                                         alt="Ahorrando agua"
+                                                                         class="rounded hover-zoom"
+                                                                         data-bs-toggle="tooltip"
+                                                                         title="Todos podemos ayudar">
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- CSS -->
+                                                            <style>
+                                                                .row img {
+                                                                    width: 100%;
+                                                                    height: 200px;
+                                                                    object-fit: cover;
+                                                                }
+                                                            </style>
+
+                                                        </div>
+                                                        <!-- Mitad videos -->
+                                                        <div class="col-md-6">
+                                                            <div class="row g-3">
+                                                                <div class="col-12">
+                                                                    <div class="card border-0">
+                                                                        <div class="ratio ratio-16x9 rounded">
+                                                                            <iframe src="https://www.youtube.com/embed/vBoKKzX4neU" frameborder="0" allowfullscreen></iframe>
+                                                                        </div>
+                                                                        <div class="card-body p-2">
+                                                                            <h5 class="card-title fw-bold">Cosas que puedes reutilizar</h5>
+                                                                            <p class="card-text small">Aprende cómo reutilizar.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="card border-0">
+                                                                        <div class="ratio ratio-16x9 rounded">
+                                                                            <iframe src="https://www.youtube.com/embed/cvakvfXj0KE" frameborder="0" allowfullscreen></iframe>
+                                                                        </div>
+                                                                        <div class="card-body p-2">
+                                                                            <h5 class="card-title fw-bold">¿Qué es reutilizar?</h5>
+                                                                            <p class="card-text small">Para mejorar el mundo.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- fin mitad videos -->
+                                                    </div> <!-- fin row g-4 -->
+                                                </div> <!-- fin card -->
+                                            </div> <!-- fin col-12 -->
+                                        </section>
+
+
+
+                                        <!-- Lista de materiales -->
+                                        <section class="row mb-5">
+                                            <div class="col-12">
+                                                <div class="card bg-white p-4 shadow">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="fas fa-boxes fa-2x me-3 text-primary"></i>
+                                                        <h4 class="mb-0 fw-bold">Materiales que Puedes Reutilizar</h4>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item">♻️ Botellas plásticas</li>
+                                                        <li class="list-group-item">👕 Ropa vieja o rota</li>
+                                                        <li class="list-group-item">📦 Cajas de cartón</li>
+                                                        <li class="list-group-item">🥫 Latas de alimentos</li>
+                                                        <li class="list-group-item">📰 Papel y revistas</li>
+                                                        <li class="list-group-item">🧦 Calcetines sin par</li>
+                                                        <li class="list-group-item">💿 Discos compactos (CD/DVD)</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section class="row mb-5">
+                                            <div class="col-12">
+                                                <div class="card bg-white p-4 shadow">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="fas fa-paint-brush fa-2x me-3 text-info"></i>
+                                                        <h4 class="mb-0 fw-bold">Instrucciones para Decorar un Objeto Reutilizado</h4>
+                                                    </div>
+                                                    <ol class="ps-3">
+                                                        <li>Elige un objeto que ya no uses (botella, lata, cartón).</li>
+                                                        <li>Límpialo bien y déjalo secar.</li>
+                                                        <li>Pinta o decóralo con papel, colores, o stickers.</li>
+                                                        <li>Dale un nuevo uso como lapicero, maceta o caja organizadora.</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <!-- Botón flotante para volver arriba (REUTILIZAR) -->
+                                <button onclick="topFunctionReutilizar()" id="btnTopReutilizar" class="btn btn-primary rounded-circle shadow-lg"
+                                        style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; display: none; border: none;">
+                                    <i class="fas fa-arrow-up fa-lg"></i>
+                                </button>
                             </div>
                         @endif
 
@@ -345,6 +566,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
+
         /* Estilos generales */
         .card-hover:hover {
             transform: translateY(-5px);
@@ -513,7 +735,7 @@
 
         /* Aplicar margin-top: 1000px solo en la pestaña Agua */
         .tab-agua-active {
-            margin-top: 1665px;
+            margin-top: 2400px;
         }
 
         /* Responsividad */
@@ -543,9 +765,7 @@
             .card p {
                 font-size: 1rem;
             }
-            .tab-agua-active {
-                margin-top: 500px; /* Reducir el margin-top en móviles para mejor experiencia */
-            }
+
         }
         @media (max-width: 768px) {
             .contenido-centro {
@@ -556,13 +776,10 @@
                 max-width: 90% !important;
                 min-height: 100vh;
             }
-            .tab-agua-active {
-                margin-top: 700px; /* Ajuste intermedio para tablets */
-            }
+
         }
     </style>
 
-    <!-- JavaScript para animación del contenedor, manejo de margin-top y desplazamiento -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('#alumnoTabs .nav-link');
@@ -572,7 +789,7 @@
             tabs.forEach(tab => {
                 tab.addEventListener('shown.bs.tab', function (e) {
                     // Añadir o remover la clase tab-agua-active según la pestaña activa
-                    if (e.target.id === 'agua-tab') {
+                    if (e.target.id === 'agua-tab' || e.target.id === 'reutilizar-tab' ) {
                         contenidoPrincipal.classList.add('tab-agua-active');
                         contenidoCentro.classList.add('tab-agua');
                     } else {
@@ -594,49 +811,121 @@
             // Mostrar/ocultar botón de subir
             window.onscroll = function() {
                 scrollFunction();
+                scrollFunctionReutilizar();
                 updateActiveNavLink();
+                updateActiveNavLinkReutilizar();
             };
         });
 
+
         function scrollFunction() {
             const btnTop = document.getElementById("btnTop");
-            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                btnTop.style.display = "block";
-            } else {
-                btnTop.style.display = "none";
+            if (btnTop) {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    btnTop.style.display = "block";
+                } else {
+                    btnTop.style.display = "none";
+                }
+            }
+        }
+
+        function scrollFunctionReutilizar() {
+            const btnTopReutilizar = document.getElementById("btnTopReutilizar");
+            if (btnTopReutilizar) {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    btnTopReutilizar.style.display = "block";
+                } else {
+                    btnTopReutilizar.style.display = "none";
+                }
             }
         }
 
         function topFunction() {
-            document.getElementById('seccion-bienvenida').scrollIntoView({behavior: 'smooth'});
+            const seccionBienvenida = document.getElementById('seccion-bienvenida');
+            if (seccionBienvenida) {
+                seccionBienvenida.scrollIntoView({behavior: 'smooth'});
+            }
         }
 
-        // Actualizar enlace activo según scroll
+        function topFunctionReutilizar() {
+            const seccionBienvenida = document.getElementById('seccion-bienvenida-reutilizar');
+            if (seccionBienvenida) {
+                seccionBienvenida.scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        // Actualizar enlace activo según scroll (para Agua)
         function updateActiveNavLink() {
-            const sections = document.querySelectorAll('section[id]');
-            let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+            const internalNav = document.getElementById('internalNav');
+            if (internalNav) {
+                const sections = document.querySelectorAll('#tab-agua section[id]');
+                let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
 
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 120;
-                const sectionHeight = section.offsetHeight;
-                const sectionId = section.getAttribute('id');
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
 
-                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                    document.querySelectorAll('#internalNav a').forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${sectionId}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('#internalNav a').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
         }
 
-        // Click en enlaces de navegación
+        // Actualizar enlace activo según scroll (para Reutilizar)
+        function updateActiveNavLinkReutilizar() {
+            const internalNavReutilizar = document.getElementById('internalNavReutilizar');
+            if (internalNavReutilizar) {
+                const sections = document.querySelectorAll('#tab-reutilizar section[id]');
+                let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('#internalNavReutilizar a').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // Click en enlaces de navegación (Agua)
         document.querySelectorAll('#internalNav a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.querySelectorAll('#internalNav a').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Click en enlaces de navegación (Reutilizar)
+        document.querySelectorAll('#internalNavReutilizar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('#internalNavReutilizar a').forEach(el => el.classList.remove('active'));
                 this.classList.add('active');
 
                 const targetId = this.getAttribute('href');

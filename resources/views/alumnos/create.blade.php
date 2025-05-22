@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+
+    <style>
+        .margenes{
+            margin-top: 200px;
+        }
+
+    </style>
+
+<div class="container margenes">
     <h3 class="mb-4">Registrar Alumno</h3>
 
     @if ($errors->any())
