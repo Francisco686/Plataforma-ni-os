@@ -268,7 +268,13 @@
                     <div class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"></div>
                 </div>
             </main>
+               <div style="width:100%; border-top: 4px solid blue; text-align: center; padding-top: 8px; margin-top: 40px; font-weight: bold;">
+            Autor: Juan Francisco Jiménez Garduño - TESVB
         </div>
+    </body>
+</html>
+
+
 
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>

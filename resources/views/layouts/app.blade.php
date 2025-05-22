@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Plataforma</title>
+    <title>Iniciar Sesión - Plataforma Educativa Ambiental</title>
+    <meta name="description" content="Accede a la plataforma educativa interactiva sobre conciencia ambiental para niños de primaria.">
+    <meta name="keywords" content="iniciar sesión, plataforma niños, conciencia ambiental, educación primaria, ecología">
 
     <link rel="stylesheet" href="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.min.css') }}">
@@ -18,7 +20,7 @@
             background-image: url("{{ asset('img/fondo2.png') }}");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: 1550px 750px; /* tamaño exacto que quieres */
+            background-size: 1550px 750px;
         }
 
         .contenido-centro {
@@ -27,7 +29,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
-            background-color: #fdfef9; /* fondo blanco semiopaco */
+            background-color: #fdfef9;
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
@@ -41,19 +43,14 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             border: none;
         }
-
-
     </style>
-
 </head>
 <body>
-<div class="contenido-centro">
-    @yield('content')
-</div>
+    <div class="contenido-centro">
+        @yield('content')
+    </div>
 
-<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
-
-
 </html>
