@@ -11,6 +11,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\SeccionTallerController;
 use App\Http\Controllers\RespuestasController;
+use App\Http\Controllers\WorkshopController;
+
+Route::get('/workshop', [WorkshopController::class, 'show']);
+Route::post('/workshop/combine', [WorkshopController::class, 'combine']);
+
 
 Route::get('/', function () {
     return redirect()->route('login');

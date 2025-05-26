@@ -1,32 +1,589 @@
-@extends('layouts.app')
+@extends('layouts.customHome')
 
 @section('content')
-    <!-- Botón de Regresar en la esquina superior izquierda -->
-    <div class="btn-back" style="position: fixed; top: 1rem; left: 1rem; z-index: 1000;">
-        <a href="{{ route('home') }}" class="btn btn-primary btn-md rounded-pill shadow">
-            <i class="fas fa-arrow-left me-2"></i> Regresar al Inicio
-        </a>
-    </div>
+    <div class="container-fluid p-0 home-background" style="background-size: cover; background-position: center; min-height: 100vh; margin: 0; padding: 0;">
+        <div class="row no-gutters" style="min-height: 100vh; margin: 0;">
+            <div class="col-12 d-flex align-items-center justify-content-center">
+                <div class="w-100 px-3 px-md-5 contenido-principal">
+                    <div class="text-center welcome-message" style="margin-top: 60px;">
+                        <div class="animate__animated animate__fadeInDown">
+                            <h1 class="text-white font-weight-bold mb-3"><strong>¡Bienvenid@, {{ Auth::user()->name }}!</strong></h1>
 
-    <!-- Título de la zona de juegos -->
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary display-4 " style="font-size: 3rem; font-weight: 700;" >Zona de Juegos</h2>
-        <p class="text-muted" style="font-size: 1.2rem;">Recuerda los íconos ecológicos y empareja las tarjetas. ¡Diviértete aprendiendo sobre el medio ambiente!</p>
-    </div>
+                            @if(Auth::user()->role === 'alumno' && Auth::user()->grupo)
+                                <div class="alert alert-info text-center mb-4">
+                                    Tu grupo es: <strong>{{ Auth::user()->grupo->grado }}°{{ strtoupper(Auth::user()->grupo->grupo) }}</strong>
+                                </div>
+                            @endif
 
-    <!-<!-- Contenedor de las tarjetas de juego con el diseño de recuadro -->
-    <div class="contenido-centro">
-        <div id="game-board" class="game-container d-flex flex-wrap justify-content-center gap-4 mb-5">
-            <!-- Las tarjetas se generarán dinámicamente con JavaScript -->
+                            <p class="lead text-white mb-5"><strong>Explora tus juegos.</strong></p>
+                        </div>
+
+
+
+                        @if(Auth::user()->role === 'alumno')
+                            <!-- Pestañas para alumnos -->
+                            <ul class="nav nav-tabs mb-4" id="alumnoTabs">
+                                <li class="nav-item">
+                                    <a class="nav-link "  href="{{ route('home') }}" >Regresar al inicio</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="agua-tab" data-bs-toggle="tab" href="#tab-agua" role="tab">Agua</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="reciclaje-tab" data-bs-toggle="tab" href="#tab-reciclaje" role="tab">Reciclaje</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="reutilizar-tab" data-bs-toggle="tab" href="#tab-reutilizar" role="tab">Reutilizar</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="alumnoTabContent">
+
+                                <!-- Pestaña Agua -->
+                                <div class="tab-pane fade" id="tab-agua" role="tabpanel">
+                                    <!-- Sección Bienvenida -->
+                                    <section id="seccion-bienvenida" class="scroll-margin-top py-4" style="scroll-margin-top: 100px;">
+                                        <!-- Título de la zona de juegos -->
+                                        <div class="text-center mb-5">
+                                            <h2 class="fw-bold text-primary display-4 " style="font-size: 3rem; font-weight: 700;" >Zona de Juegos</h2>
+                                            <p class="text-muted" style="font-size: 1.2rem;">Recuerda los íconos ecológicos y empareja las tarjetas. ¡Diviértete aprendiendo sobre el medio ambiente!</p>
+                                        </div>
+
+                                        <!-<!-- Contenedor de las tarjetas de juego con el diseño de recuadro -->
+                                        <div class="contenido-centro">
+                                            <div id="game-board" class="game-container d-flex flex-wrap justify-content-center gap-4 mb-5">
+                                                <!-- Las tarjetas se generarán dinámicamente con JavaScript -->
+                                            </div>
+
+                                            <!-- Mensaje de resultado cuando el juego termine -->
+                                            <div id="game-result" class="text-center" style="display: none;">
+                                                <h3 class="fw-bold text-success">¡Felicidades!</h3>
+                                                <p class="fs-4 text-muted">Has completado el juego con éxito. ¡Recuerda siempre cuidar el medio ambiente!</p>
+                                                <button id="restart-button" class="btn btn-primary">Reiniciar Juego</button>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+
+
+                                <!-- Pestaña Reciclaje -->
+                                <div class="tab-pane fade" id="tab-reciclaje" role="tabpanel">
+                                    <div class="animate__animated animate__fadeIn">
+                                        <h3 class="text-white text-center mb-4">Reciclaje</h3>
+                                        <div class="card bg-white text-dark p-4">
+                                            <p>¡Pronto tendrás información sobre reciclaje aquí!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Pestaña Reutilizar -->
+                                <div class="tab-pane fade" id="tab-reutilizar" role="tabpanel">
+                                    <!-- Sección de bienvenida -->
+                                    <section id="seccion-bienvenida-reutilizar" class="mb-5 scroll-margin-top" style="scroll-margin-top: 100px;">
+                                        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+                                        <!-- 🎮 Juego Taller Creativo -->
+                                        <section id="taller-creativo" class="mt-4">
+                                            <div class="card bg-light text-dark p-4 shadow">
+                                                <h5 class="fw-bold mb-3">🎮 Taller Creativo</h5>
+                                                <p>Selecciona dos materiales y crea algo nuevo con ellos.</p>
+
+                                                <!-- Botones de materiales -->
+                                                <div class="mb-3 d-flex flex-wrap gap-2">
+                                                    <button class="btn btn-outline-primary" onclick="toggleMaterial('botella')">Botella</button>
+                                                    <button class="btn btn-outline-success" onclick="toggleMaterial('ropa')">Ropa Vieja</button>
+                                                    <button class="btn btn-outline-warning" onclick="toggleMaterial('cartón')">Cartón</button>
+                                                    <button class="btn btn-outline-secondary" onclick="toggleMaterial('lata')">Lata</button>
+                                                    <button class="btn btn-outline-info" onclick="toggleMaterial('cd')">CD Viejo</button>
+                                                </div>
+
+                                                <!-- Imágenes de materiales seleccionados -->
+                                                <div id="selectedImages" class="d-flex flex-wrap gap-3 mt-3"></div>
+
+                                                <!-- Botón para crear el objeto -->
+                                                <button class="btn btn-dark mt-3" onclick="combineMaterials()">Crear Objeto</button>
+
+                                                <!-- Resultado del objeto creado -->
+                                                <div id="resultArea" class="mt-4 d-none">
+                                                    <h5 id="resultTitle" class="fw-bold"></h5>
+                                                    <img id="resultImage" src="" alt="Imagen del objeto creado" class="img-fluid my-3 rounded shadow" style="max-width: 300px;">
+                                                    <p id="resultDescription"></p>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- Scripts del juego -->
+                                        <script>
+                                            let selected = [];
+
+                                            function toggleMaterial(material) {
+                                                const images = {
+                                                    'botella': '/images/materiales/botella.png',
+                                                    'ropa': '/images/materiales/ropa.png',
+                                                    'cartón': '/images/materiales/carton.png',
+                                                    'lata': '/images/materiales/lata.png',
+                                                    'cd': '/images/materiales/cd.png'
+                                                };
+
+                                                if (selected.includes(material)) {
+                                                    selected = selected.filter(m => m !== material);
+                                                } else if (selected.length < 2) {
+                                                    selected.push(material);
+                                                }
+
+                                                const selectedImagesDiv = document.getElementById('selectedImages');
+                                                selectedImagesDiv.innerHTML = '';
+                                                selected.forEach(mat => {
+                                                    const img = document.createElement('img');
+                                                    img.src = images[mat];
+                                                    img.alt = mat;
+                                                    img.style.maxWidth = '120px';
+                                                    img.className = 'rounded shadow';
+                                                    selectedImagesDiv.appendChild(img);
+                                                });
+
+                                                console.log("Seleccionados:", selected);
+                                            }
+
+                                            function combineMaterials() {
+                                                if (selected.length !== 2) {
+                                                    alert("Selecciona exactamente 2 materiales.");
+                                                    return;
+                                                }
+
+                                                fetch("{{ url('/workshop/combine') }}", {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=\"csrf-token\"]').getAttribute('content')
+                                                    },
+                                                    body: JSON.stringify({ materials: selected })
+                                                })
+                                                    .then(response => {
+                                                        if (!response.ok) {
+                                                            throw new Error('Respuesta del servidor no válida.');
+                                                        }
+                                                        return response.json();
+                                                    })
+                                                    .then(data => {
+                                                        document.getElementById('resultTitle').textContent = data.title;
+                                                        document.getElementById('resultImage').src = data.image;
+                                                        document.getElementById('resultDescription').textContent = data.description;
+                                                        document.getElementById('resultArea').classList.remove('d-none');
+
+                                                        selected = [];
+                                                        document.getElementById('selectedImages').innerHTML = '';
+                                                    })
+                                                    .catch(error => {
+                                                        console.error("Error al combinar materiales:", error);
+                                                        alert("Ocurrió un error al combinar los materiales. Intenta de nuevo.");
+                                                        selected = [];
+                                                        document.getElementById('selectedImages').innerHTML = '';
+                                                    });
+                                            }
+                                        </script>
+                                    </section>
+                                </div>
+
+
+
+                                @endif
+
+                        <div class="mt-5 animate__animated animate__fadeInUp">
+                            <a href="{{ route('logout') }}" class="btn btn-dark btn-lg btn-hover"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt icon-animate"></i> Cerrar Sesión
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Mensaje de resultado cuando el juego termine -->
-        <div id="game-result" class="text-center" style="display: none;">
-            <h3 class="fw-bold text-success">¡Felicidades!</h3>
-            <p class="fs-4 text-muted">Has completado el juego con éxito. ¡Recuerda siempre cuidar el medio ambiente!</p>
-            <button id="restart-button" class="btn btn-primary">Reiniciar Juego</button>
-        </div>
     </div>
+
+    <!-- Dependencias -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+
+        /* Estilos generales */
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-hover:hover {
+            transform: scale(1.05);
+        }
+        .home-background {
+            animation: subtleBackground 15s infinite alternate;
+        }
+        @keyframes subtleBackground {
+            0% { background-position: center; }
+            100% { background-position: 20% center; }
+        }
+        .card {
+            padding: 25px 15px !important;
+        }
+        .card h4 {
+            margin-bottom: 15px;
+        }
+        .card p {
+            margin-bottom: 20px;
+        }
+        .icon-animate {
+            transition: all 0.5s ease;
+        }
+        .book-animate {
+            animation: bookFlip 3s infinite ease-in-out;
+        }
+        .pencil-animate {
+            animation: pencilWrite 2s infinite alternate;
+        }
+        .gamepad-animate {
+            animation: gamepadVibrate 1.5s infinite;
+        }
+        .star-animate {
+            animation: starPulse 2s infinite alternate;
+        }
+        .logout-animate {
+            animation: rotateLogout 4s infinite linear;
+        }
+        @keyframes bookFlip {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(20deg); }
+        }
+        @keyframes pencilWrite {
+            0% { transform: rotate(0deg) translateX(0); }
+            100% { transform: rotate(5deg) translateX(5px); }
+        }
+        @keyframes gamepadVibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px) rotate(-5deg); }
+            75% { transform: translateX(3px) rotate(5deg); }
+        }
+        @keyframes starPulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 10px gold; }
+        }
+        @keyframes rotateLogout {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos de pestañas */
+        .nav-tabs {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            border-bottom: 2px solid #dee2e6;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .nav-tabs .nav-link {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            margin-right: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            color: #495057;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-tabs .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-top: 3px solid #007bff;
+            border-bottom: 2px solid #fff;
+            color: #007bff;
+        }
+        .tab-content {
+            background-color: transparent;
+            padding: 1rem;
+        }
+
+        /* Animación del contenedor */
+        .contenido-centro {
+            transition: all 0.5s ease;
+            max-width: 950px;
+            min-height: 80vh;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .contenido-centro.tab-agua {
+            max-width: 1200px;
+            min-height: 10vh;
+        }
+
+        /* Estilos para la navegación interna */
+        .scroll-margin-top {
+            scroll-margin-top: 120px;
+        }
+
+        /* Estilo para enlaces activos */
+        .navbar-nav .nav-link.active {
+            font-weight: bold;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+
+        /* Efecto smooth al desplazarse */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Efecto hover para imágenes */
+        .hover-zoom {
+            transition: transform 0.3s ease;
+        }
+        .hover-zoom:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo para las tarjetas */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+        /* Botón flotante */
+        #btnTop {
+            transition: all 0.3s ease;
+        }
+        #btnTop:hover {
+            transform: translateY(-3px);
+            background-color: #0b5ed7 !important;
+        }
+
+        /* Estilos para el margen del mensaje de bienvenida */
+        .welcome-message {
+            margin-top: 60px; /* Default para el mensaje principal */
+        }
+
+        /* Asegurar que la pestaña Inicio tenga el margen correcto */
+        #tab-inicio .welcome-message {
+            margin-top: 60px;
+        }
+
+        /* Aplicar margin-top: 1000px solo en la pestaña Agua */
+
+
+
+
+        /* Responsividad */
+        @media (max-width: 576px) {
+            .contenido-centro {
+                max-width: 95% !important;
+                padding: 1rem !important;
+            }
+            .contenido-centro.tab-agua {
+                max-width: 95% !important;
+                min-height: 100vh;
+            }
+            .nav-tabs {
+                flex-direction: column;
+            }
+            .nav-tabs .nav-link {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+            }
+            .display-4 {
+                font-size: 2rem;
+            }
+            .card h4 {
+                font-size: 1.3rem;
+            }
+            .card p {
+                font-size: 1rem;
+            }
+
+        }
+        @media (max-width: 768px) {
+            .contenido-centro {
+                max-width: 90% !important;
+                padding: 1.5rem !important;
+            }
+            .contenido-centro.tab-agua {
+                max-width: 90% !important;
+                min-height: 100vh;
+            }
+
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('#alumnoTabs .nav-link');
+            const contenidoPrincipal = document.querySelector('.contenido-principal');
+            const contenidoCentro = document.querySelector('.contenido-centro');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (e) {
+                    // Añadir o remover la clase tab-agua-active según la pestaña activa
+                    if (e.target.id === 'agua-tab' || e.target.id === 'reutilizar-tab' ) {
+                        contenidoPrincipal.classList.add('tab-agua-active');
+                        contenidoCentro.classList.add('tab-agua');
+                    } else {
+                        contenidoPrincipal.classList.remove('tab-agua-active');
+                        contenidoCentro.classList.remove('tab-agua');
+                    }
+
+                    // Desplazar al inicio del contenedor principal en todas las pestañas
+                    contenidoPrincipal.scrollIntoView({ behavior: 'instant', block: 'start' });
+                });
+            });
+
+            // Activar tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Mostrar/ocultar botón de subir
+            window.onscroll = function() {
+                scrollFunction();
+                scrollFunctionReutilizar();
+                updateActiveNavLink();
+                updateActiveNavLinkReutilizar();
+            };
+        });
+
+
+        function scrollFunction() {
+            const btnTop = document.getElementById("btnTop");
+            if (btnTop) {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    btnTop.style.display = "block";
+                } else {
+                    btnTop.style.display = "none";
+                }
+            }
+        }
+
+        function scrollFunctionReutilizar() {
+            const btnTopReutilizar = document.getElementById("btnTopReutilizar");
+            if (btnTopReutilizar) {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    btnTopReutilizar.style.display = "block";
+                } else {
+                    btnTopReutilizar.style.display = "none";
+                }
+            }
+        }
+
+        function topFunction() {
+            const seccionBienvenida = document.getElementById('seccion-bienvenida');
+            if (seccionBienvenida) {
+                seccionBienvenida.scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        function topFunctionReutilizar() {
+            const seccionBienvenida = document.getElementById('seccion-bienvenida-reutilizar');
+            if (seccionBienvenida) {
+                seccionBienvenida.scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        // Actualizar enlace activo según scroll (para Agua)
+        function updateActiveNavLink() {
+            const internalNav = document.getElementById('internalNav');
+            if (internalNav) {
+                const sections = document.querySelectorAll('#tab-agua section[id]');
+                let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('#internalNav a').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // Actualizar enlace activo según scroll (para Reutilizar)
+        function updateActiveNavLinkReutilizar() {
+            const internalNavReutilizar = document.getElementById('internalNavReutilizar');
+            if (internalNavReutilizar) {
+                const sections = document.querySelectorAll('#tab-reutilizar section[id]');
+                let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('#internalNavReutilizar a').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        // Click en enlaces de navegación (Agua)
+        document.querySelectorAll('#internalNav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('#internalNav a').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Click en enlaces de navegación (Reutilizar)
+        document.querySelectorAll('#internalNavReutilizar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('#internalNavReutilizar a').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 
     <!-- Estilos CSS -->
     <style>
