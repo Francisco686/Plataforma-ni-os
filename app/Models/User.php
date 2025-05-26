@@ -60,5 +60,20 @@ class User extends Authenticatable
     {
         return $this->role === 'alumno';
     }
+    public function logros()
+{
+    return $this->belongsToMany(Logro::class)->withPivot('fecha_obtenido');
+}
+
+public function partidas()
+{
+    return $this->hasMany(Partida::class);
+}
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
+
 
 }

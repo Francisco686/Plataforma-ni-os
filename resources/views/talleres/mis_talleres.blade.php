@@ -1,165 +1,144 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Botón fuera del contenedor interno -->
-    <div class="btn-back" style="position: fixed; top: 1rem; left: 1rem; z-index: 1000;">
-        <a href="{{ route('home') }}" onclick="console.log('Botón Regresar clicado')" class="btn btn-primary btn-md rounded-pill shadow animate__animated animate__fadeIn" style="font-size: 1.1rem; padding: 0.5rem 1.5rem; pointer-events: auto;">
-            <i class="fas fa-arrow-left me-2"></i> Regresar al Inicio
-        </a>
-    </div>
+<!-- Fondo decorativo -->
+<style>
+    body {
+        background-image: url('{{ asset("img/fondo2.png") }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
 
-    <div class="w-100 position-relative" style="padding: 1rem;">
-        <!-- Título -->
-        <h2 class="text-center fw-bold mb-4 mb-md-5 display-4 text-primary animate__animated animate__fadeInDown"
-            style="font-size: 3rem; font-weight: 700;">
-            Mis Talleres
-        </h2>
+<!-- Botón de regreso -->
+<div class="btn-back" style="position: fixed; top: 1rem; left: 1rem; z-index: 1000;">
+    <a href="{{ route('home') }}" class="btn btn-primary btn-md rounded-pill shadow animate__animated animate__fadeIn"
+       style="font-size: 1.1rem; padding: 0.5rem 1.5rem;">
+        <i class="fas fa-arrow-left me-2"></i> Regresar al Inicio
+    </a>
+</div>
 
-        <!-- Cuadrícula de tarjetas -->
-        @forelse($talleres as $index => $taller)
-            @if($index % 4 === 0)
-                <div class="row g-5 mb-5 mb-md-3">
-                    @endif
+<!-- Contenido principal -->
+<div class="w-100 position-relative" style="padding: 1rem;">
+    <!-- Título -->
+    <h2 class="text-center fw-bold mb-5 display-4 text-primary animate__animated animate__pulse"
+        style="font-size: 3rem; font-weight: 700;">
+        🌱 ¡Explora tus Talleres!
+    </h2>
 
-                    <div class="col-md-3 col-12">
-                        <div class="card h-100 shadow-lg border-0 rounded-4 animate__animated animate__fadeInUp">
-                            <div class="card-body d-flex flex-column justify-content-between p-4">
-                                <div class="mb-4">
-                                    <h5 class="fw-bold text-dark mb-3" style="font-size: 1.7rem;">{{ $taller->titulo }}</h5>
-                                    <p class="text-dark" style="font-size: 1.3rem;">{{ Str::limit($taller->descripcion, 100) }}</p>
-                                </div>
-
-                                <div class="d-flex flex-column gap-2 ">
-                                    @if($taller->materiales)
-                                        <a href="{{ asset('storage/' . $taller->materiales) }}" target="_blank"
-                                           class="btn btn-outline-success rounded-pill w-100 text-start px-3 py-2" style=" font-size: 1.1rem;">
-                                            <i class="fas fa-file-alt me-2"></i> Ver Material
-                                        </a>
-                                    @else
-                                        <span class="badge bg-warning text-dark py-2 px-3 align-self-center" style="font-size: 1rem;">Sin material</span>
-                                    @endif
-
-                                    <a href="{{ route('talleres.show', $taller) }}"
-                                       class="btn btn-outline-primary rounded-pill w-100 text-start px-3 py-2" style="font-size: 1.1rem;">
-                                        <i class="fas fa-tasks me-2"></i> Ver Secciones
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    @if($index % 4 === 3 || $loop->last)
-                </div>
-            @endif
-        @empty
-            <div class="row g-5 mb-5">
-                <div class="col-12">
-                    <div class="alert alert-info animate__animated animate__fadeIn p-4">
-                        <h4 class="fw-bold mb-3" style="font-size: 1.6rem;">¡Aún no tienes talleres asignados!</h4>
-                        <p class="mb-0" style="font-size: 1.2rem;">Espera a que tu maestro te asigne nuevos talleres para comenzar a aprender.</p>
-                    </div>
+    <!-- Tarjetas fijas -->
+    <div class="row g-5 mb-5">
+        <!-- Agua -->
+        <div class="col-md-4 col-12">
+            <div class="card h-100 border-primary shadow-lg rounded-4 animate__animated animate__zoomIn">
+                <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
+                    <img src="{{ asset('img/agua.png') }}" alt="Agua" class="mb-3" style="height: 100px;">
+                    <h5 class="fw-bold text-primary mb-3" style="font-size: 1.7rem;">💧 Taller del Agua</h5>
+                    <p style="font-size: 1.2rem;">Aprende a cuidar el agua con cuentos, juegos y actividades.</p>
+                    <a href="{{ route('talleres.agua') }}" class="btn btn-outline-primary rounded-pill mt-3">
+                        <i class="fas fa-tint me-2"></i> ¡Vamos!
+                    </a>
                 </div>
             </div>
-        @endforelse
+        </div>
+
+        <!-- Reciclaje -->
+        <div class="col-md-4 col-12">
+            <div class="card h-100 border-warning shadow-lg rounded-4 animate__animated animate__zoomIn">
+                <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
+                    <img src="{{ asset('img/reciclaje.jpg') }}" alt="Reciclaje" class="mb-3" style="height: 100px;">
+                    <h5 class="fw-bold text-warning mb-3" style="font-size: 1.7rem;">♻️ Taller de Reciclaje</h5>
+                    <p style="font-size: 1.2rem;">Descubre cómo reciclar de forma divertida y creativa.</p>
+                    <a href="{{ route('talleres.reciclaje') }}" class="btn btn-outline-warning rounded-pill mt-3">
+                        <i class="fas fa-recycle me-2"></i> ¡A reciclar!
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reutilizar -->
+        <div class="col-md-4 col-12">
+            <div class="card h-100 border-success shadow-lg rounded-4 animate__animated animate__zoomIn">
+                <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
+                    <img src="{{ asset('img/reutilizarfeliz.jpg') }}" alt="Reutilizar" class="mb-3" style="height: 100px;">
+                    <h5 class="fw-bold text-success mb-3" style="font-size: 1.7rem;">🔁 Taller de Reutilizar</h5>
+                    <p style="font-size: 1.2rem;">Dale una segunda vida a los objetos con actividades creativas.</p>
+                    <a href="{{ route('talleres.reutilizar') }}" class="btn btn-outline-success rounded-pill mt-3">
+                        <i class="fas fa-sync-alt me-2"></i> ¡Reutilicemos!
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Animaciones -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <style>
-        /* Asegurar que el cuerpo permita scroll */
-        html, body {
-            height: auto !important;
-            min-height: 100vh;
-            overflow-y: auto !important;
-            margin: 0;
-            padding: 0;
-        }
+    <!-- Talleres adicionales dinámicos -->
+    @foreach($talleres as $index => $taller)
+        @if($index % 3 === 0)
+            <div class="row g-5 mb-5">
+        @endif
 
-        /* Forzar un contenedor dinámico con efecto de blur en layouts.app */
-        .contenido-centro {
-            max-width: 1400px !important;
-            height: auto !important;
-            padding: 3rem !important;
-            width: 100% !important;
-            margin: 0 auto !important;
-            position: static !important;
-            transform: none !important;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            -webkit-backdrop-filter: blur(25px);
-            backdrop-filter: blur(25px);
-            border-radius: 1rem;
-            pointer-events: auto !important;
-        }
+        <div class="col-md-4 col-12">
+            <div class="card h-100 border-0 shadow-lg rounded-4 animate__animated animate__fadeInUp">
+                <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
+                    <h5 class="fw-bold text-dark mb-3" style="font-size: 1.6rem;">📘 {{ $taller->titulo }}</h5>
+                    <p class="text-muted" style="font-size: 1.2rem;">{{ Str::limit($taller->descripcion, 100) }}</p>
 
-        /* Ajustar contenido */
-        .w-100, .row, .card, .alert, .btn {
-            max-width: 100%;
-            margin-left: 0;
-            margin-right: 0;
-            padding-left: 0;
-            padding-right: 0;
-            box-sizing: border-box;
-        }
+                    @if($taller->materiales)
+                        <a href="{{ asset('storage/' . $taller->materiales) }}" target="_blank"
+                           class="btn btn-outline-secondary rounded-pill my-2">
+                            📄 Ver Material
+                        </a>
+                    @endif
 
-        /* Estilo de las tarjetas */
-        .card {
-            min-height: 250px;
-            max-height: 400px;
-            transition: transform 0.2s;
-            background-color: #fff !important;
-        }
+                    <a href="{{ route('talleres.show', $taller) }}"
+                       class="btn btn-outline-primary rounded-pill mt-2">
+                        <i class="fas fa-book-reader me-2"></i> Ver Secciones
+                    </a>
+                </div>
+            </div>
+        </div>
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+        @if($index % 3 === 2 || $loop->last)
+            </div>
+        @endif
+    @endforeach
+</div>
 
-        /* Estilo del botón */
-        .btn-back, .btn-back a {
-            pointer-events: auto !important;
-        }
+<!-- Estilos y animaciones -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
 
-        /* Ajustar tamaños en móviles */
-        @media (max-width: 576px) {
-            .contenido-centro {
-                max-width: 95% !important;
-                padding: 1rem !important;
-                height: auto !important;
-            }
-            .display-4 {
-                font-size: 2rem;
-            }
-            .card-title {
-                font-size: 1.3rem;
-            }
-            .card-text, .btn, .alert h4, .alert p {
-                font-size: 1rem;
-            }
-            .card {
-                min-height: 200px;
-                max-height: 350px;
-            }
-            .row {
-                margin-bottom: 2rem !important;
-            }
-            .row.g-5 {
-                gap: 1rem !important;
-            }
-        }
+<style>
+    html, body {
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: auto;
+        background-color: #f0fdf4;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
 
-        @media (max-width: 768px) {
-            .contenido-centro {
-                max-width: 90% !important;
-                padding: 1.5rem !important;
-                height: auto !important;
-            }
-            .row {
-                margin-bottom: 2.5rem !important;
-            }
-            .row.g-5 {
-                gap: 1.5rem !important;
-            }
-        }
-    </style>
+    .card {
+        border: 3px dashed #ddd !important;
+        background-color: #ffffffcc;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.2);
+    }
+
+    .btn {
+        font-size: 1.1rem;
+    }
+
+    .display-4 {
+        color: #0d6efd;
+        text-shadow: 2px 2px #d0f0ff;
+    }
+
+    .btn-back {
+        z-index: 1000;
+    }
+</style>
 @endsection

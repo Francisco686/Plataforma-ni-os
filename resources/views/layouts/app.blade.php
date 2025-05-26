@@ -12,48 +12,37 @@
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
+            height: auto;
+            min-height: 100vh;
             background-color: #f8f9fc;
             background-image: url("{{ asset('img/fondo2.png') }}");
             background-repeat: no-repeat;
-            background-position: center center;
-            background-size: 1550px 750px; /* tamaño exacto que quieres */
+            background-position: center top;
+            background-size: cover;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
-        .contenido-centro {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            background-color: #fdfef9; /* fondo blanco semiopaco */
-            padding: 2rem;
-            border-radius: 1rem;
+        main {
             width: 100%;
-            max-width: 980px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        .login-overlay .card {
-            padding: 16px 20px;
-            border-radius: 1.5rem;
-            background-color: #ffffff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: none;
+        .card {
+            border-radius: 1rem;
         }
-
-
     </style>
-
 </head>
 <body>
-<div class="contenido-centro">
-    @yield('content')
-</div>
 
-<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <main>
+        @yield('content')
+    </main>
+
+    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
 </body>
-
-
 </html>

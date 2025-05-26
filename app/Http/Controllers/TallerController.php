@@ -202,4 +202,26 @@ class TallerController extends Controller
 
         return back()->with('success', 'Usuario removido del taller correctamente');
     }
+    /**
+ * Vista del Taller del Agua.
+ */
+public function agua()
+{
+    return view('talleres.partials.agua');
+}
+
+/**
+ * Vista del Taller de Reciclaje.
+ */
+public function reciclaje()
+{
+   return view('talleres.partials.reciclaje');
+
+}
+public function reutilizar()
+{
+    return view('talleres.partials.reutilizar');
+}
+
+
 }

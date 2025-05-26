@@ -2,18 +2,17 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
-    public function run(): void
-    {
-        // Ejecutar el seeder de talleres que también crea un usuario con CURP
-        $this->call([
-            TallerSeeder::class,
-        ]);
-    }
+    public function run()
+{
+    $this->call(LogrosSeeder::class);
+}
+
 }
