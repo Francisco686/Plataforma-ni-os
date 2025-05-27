@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('clase-centro', 'contenido-centro_login')
 @section('content')
 <div style="width: 100%; background-color: #0d6efd; color: white; text-align: center; padding: 12px 10px; font-weight: bold; font-size: 1.1rem; margin-top: 8px; border-radius: 8px;">
     Título: Iniciar Sesión - Plataforma Educativa Ambiental
@@ -73,7 +73,4 @@
     </div>
 </div>
 
-<div style="width: 100%; background-color: #0d6efd; color: white; text-align: center; padding: 12px 10px; font-weight: bold; font-size: 1.1rem; margin-top: 8px; margin-bottom: 20px; border-radius: 8px;">
-    Autor: Juan Francisco Jiménez Garduño - TESVB
-</div>
 @endsection

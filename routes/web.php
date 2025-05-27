@@ -12,9 +12,24 @@ use App\Http\Controllers\EvaluacionController;
 use App\Http\Controllers\SeccionTallerController;
 use App\Http\Controllers\RespuestasController;
 use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\JuegoController;
+use App\Http\Controllers\LogroController;
+
 
 Route::get('/workshop', [WorkshopController::class, 'show']);
 Route::post('/workshop/combine', [WorkshopController::class, 'combine']);
+
+Route::get('/workshop', [WorkshopController::class, 'show']);
+Route::get('/juegos/combinar', function () {
+    return view('juegos.combinar');
+})->name('juegos.combinar');
+
+Route::post('/juegos/combinar', [App\Http\Controllers\WorkshopController::class, 'combine']);
+Route::get('/juegos/clasificacion', function () {
+    return view('juegos.clasificacion'); // o el nombre que le pongas a la vista del juego
+})->name('juegos.clasificacion');
+
+
 
 
 Route::get('/', function () {
@@ -33,6 +48,7 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/mis-logros', [LogroController::class, 'index'])->name('logros.index')->middleware('auth');
 Route::middleware(['auth'])->group(function () {
 
     // Inicio
@@ -40,6 +56,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Talleres
     Route::get('/talleres', [TallerController::class, 'index'])->name('talleres.index');
+
+    // ✅ Rutas fijas antes que las dinámicas
+    Route::get('/talleres/agua', [TallerController::class, 'agua'])->name('talleres.agua');
+    Route::get('/talleres/reciclaje', [TallerController::class, 'reciclaje'])->name('talleres.reciclaje');
+
+
+
+route::get('/mis-logros', [LogroController::class, 'index'])->name('logros.index')->middleware('auth');
+
+    Route::get('/talleres/reutilizar', [TallerController::class, 'reutilizar'])->name('talleres.reutilizar');
+
+    // Rutas dinámicas de talleres
     Route::post('/talleres', [TallerController::class, 'store'])->name('talleres.store');
     Route::get('/talleres/{taller}/edit', [TallerController::class, 'edit'])->name('talleres.edit');
     Route::put('/talleres/{taller}', [TallerController::class, 'update'])->name('talleres.update');
@@ -48,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/talleres/{taller}', [TallerController::class, 'show'])->name('talleres.show');
     Route::get('/talleres/create', 'TallerController@create')->name('talleres.create');
 
+    // Secciones
     Route::get('secciones/create/{taller}', [SeccionController::class, 'create'])->name('secciones.create');
     Route::post('secciones/{taller}', [SeccionController::class, 'store'])->name('secciones.store');
 
@@ -59,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
     // Completar sección
     Route::post('/taller/completar', [TallerController::class, 'completarSeccion'])->name('talleres.completar');
 
-    // Secciones (de SeccionController)
+    // Secciones adicionales
     Route::post('/secciones', [SeccionController::class, 'store'])->name('secciones.store');
     Route::get('/secciones/{seccion}/edit', [SeccionController::class, 'edit'])->name('secciones.edit');
     Route::put('/secciones/{seccion}', [SeccionController::class, 'update'])->name('secciones.update');
@@ -74,15 +103,15 @@ Route::middleware(['auth'])->group(function () {
     // Evaluaciones
     Route::get('/evaluaciones', [EvaluacionController::class, 'index'])->name('evaluaciones.index');
 
-    // Rutas específicas para docente
+    // Docente
     Route::get('/docente/talleres', [TallerController::class, 'index'])->name('docente.talleres.index');
     Route::post('/docente/talleres', [TallerController::class, 'store'])->name('docente.talleres.store');
 
-    // Gestión de grupo
+    // Grupos
     Route::post('/usuario/cambiar-grupo', [UserController::class, 'cambiarGrupo'])->name('user.cambiarGrupo');
     Route::post('/docente/cambiar-grupo', [UserController::class, 'cambiarGrupo'])->name('docente.cambiar.grupo');
 
-    // Secciones (de SeccionTallerController)
+    // Secciones tipo taller
     Route::post('/talleres/{taller}/secciones', [SeccionTallerController::class, 'store'])->name('secciones.store.taller');
     Route::get('/talleres/{taller}/secciones/create', [SeccionTallerController::class, 'create'])->name('secciones.create');
     Route::get('/secciones/{id}/edit', [SeccionTallerController::class, 'edit'])->name('secciones.edit.taller');
@@ -97,10 +126,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/respuestas', [RespuestasController::class, 'store'])->name('respuestas.store');
 });
 
-// Zona de juegos
+
+Route::get('/jugar/{tipo}', [JuegoController::class, 'guardarPartida'])->middleware('auth');
+
+
 Route::get('/juegos', function () {
     return view('juegos.index');
 })->name('juegos.index');
+
+Route::get('/juegos/memorama', function () {
+    return view('juegos.memorama');
+})->name('juegos.memorama');
+
+Route::get('/juegos/sopa', function () {
+    return view('juegos.sopa');
+});
+
 
 // Archivos de materiales
 Route::get('/storage/materiales/{filename}', function ($filename) {
