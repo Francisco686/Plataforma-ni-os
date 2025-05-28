@@ -35,19 +35,17 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
-
             'password' => 'required|string|min:6|confirmed',
         ]);
-        /////dd($request->all());
 
         $user = new User();
         $user->role = 'docente'; // Siempre asigna "docente"
         $user->name = $request->name;
         $user->password = Hash::make($request->password);
         $user->password_visible = $request->password;
+        $user->password_temporal = false;
         $user->save();
 
         Auth::login($user);
@@ -74,6 +72,24 @@ class AuthController extends Controller
 
         if ($user) {
             Auth::login($user);
+
+            // Si la contraseña es temporal, redirigir a formulario de cambio
+            if ($user->password_temporal) {
+                return redirect()->route('docente.password.cambiar');
+            }
+
+            // Si es docente, contar alumnos del grupo asignado
+            if ($user->role === 'docente') {
+                $alumnosRegistrados = User::where('role', 'alumno')
+                    ->where('grupo_id', $user->grupo_id)
+                    ->count();
+
+                return redirect()->route('home')->with([
+                    'success' => 'Inicio de sesión exitoso.',
+                    'alumnosRegistrados' => $alumnosRegistrados
+                ]);
+            }
+
             return redirect()->route('home')->with('success', 'Inicio de sesión exitoso.');
         }
 
@@ -87,5 +103,33 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect()->route('login')->with('success', 'Sesión cerrada correctamente.');
+    }
+
+    /**
+     * Muestra formulario de cambio obligatorio de contraseña.
+     */
+    public function mostrarCambioPassword()
+    {
+        return view('auth.cambiar_password');
+    }
+
+    /**
+     * Actualiza la contraseña obligatoriamente y cierra sesión.
+     */
+    public function actualizarPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->password);
+        $user->password_visible = null; // opcional: dejarlo en blanco para seguridad
+        $user->password_temporal = false;
+        $user->save();
+
+        Auth::logout();
+
+        return redirect()->route('login')->with('success', 'Contraseña cambiada correctamente. Inicia sesión con la nueva.');
     }
 }

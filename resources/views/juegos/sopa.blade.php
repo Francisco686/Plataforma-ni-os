@@ -366,17 +366,24 @@ if (todos.every(s => s.style.textDecoration === 'line-through')) {
 
 <script>
 function registrarPartida(tipo) {
-    fetch("/jugar/" + tipo)
-        .then(response => response.json())
-        .then(data => {
-            console.log("✅ Partida guardada:", data);
+    fetch(`/juegos/completar/${tipo}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("✅ Partida guardada:", data);
 
-            if (data.nuevo_logro) {
-                mostrarNuevoLogro(data.nuevo_logro);
-            }
-        })
-        .catch(error => console.error("❌ Error al registrar partida:", error));
+        if (data.nuevo_logro) {
+            mostrarNuevoLogro(data.nuevo_logro);
+        }
+    })
+    .catch(error => console.error("❌ Error al registrar partida:", error));
 }
+
 
 function mostrarNuevoLogro(nombre) {
     const div = document.createElement("div");

@@ -10,14 +10,19 @@ use App\Models\Group;
 
 class AlumnoController extends Controller
 {
-    public function index()
-    {
-        $grupos = Group::all();
-        $grupo = Auth::user()->grupo;
-        $alumnos = $grupo ? $grupo->alumnos()->where('role', 'alumno')->get() : [];
+public function index()
+{
+    $grupos = Group::all();
+    $grupo = Auth::user()->grupo;
 
-        return view('alumnos.index', compact('grupos', 'alumnos'));
-    }
+    $alumnos = $grupo ? $grupo->alumnos()->where('role', 'alumno')->get() : [];
+
+    $total = $alumnos ? $alumnos->count() : 0;
+
+    return view('alumnos.index', compact('grupos', 'alumnos', 'total'));
+}
+
+
 
     public function create()
     {

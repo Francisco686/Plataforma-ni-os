@@ -23,7 +23,7 @@ class JuegoController extends Controller
         $total = $user->partidas()->count();
 
         $logros = [
-            ['nombre' => 'Jugador Novato', 'meta' => 5],
+            ['nombre' => 'Jugador Novato', 'meta' => 1],
             ['nombre' => 'Jugador Intermedio', 'meta' => 20],
             ['nombre' => 'Jugador Avanzado', 'meta' => 30],
         ];

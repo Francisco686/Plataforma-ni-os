@@ -40,6 +40,7 @@
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             animation: floatUp 6s linear infinite;
         }
+
         .balloon::after {
             content: '';
             position: absolute;
@@ -134,12 +135,12 @@
                     </div>
                 @endif
 
-                <p class="lead text-dark mb-5 fs-4 mt-4">
-                    ¡Explora tus talleres, juegos y logros mágicos! 🌟🧠
-                </p>
+                @if(Auth::user()->role === 'alumno')
+                    <p class="lead text-dark mb-5 fs-4 mt-4">
+                        ¡Explora tus talleres, juegos y logros mágicos! 🌟🧠
+                    </p>
 
-                <div class="row g-4 justify-content-center animate__animated animate__fadeInUp">
-                    @if(Auth::user()->role === 'alumno')
+                    <div class="row g-4 justify-content-center animate__animated animate__fadeInUp">
                         <div class="col-md-4">
                             <div class="card text-center p-4">
                                 <div class="icon">📚</div>
@@ -161,25 +162,50 @@
                                 <a href="{{ route('logros.index') }}" class="btn btn-outline-primary mt-3">Ver</a>
                             </div>
                         </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
+
+                @if(Auth::user()->role === 'docente')
+                    <div class="container-fluid px-3 px-md-5 position-relative mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-12 text-center">
+                                <p class="lead text-dark fs-4 mb-4">
+                                    Bienvenido docente. Gestiona alumnos y consulta evaluaciones. 👨‍🏫📊
+                                </p>
+
+                                <div class="row g-4 justify-content-center animate__animated animate__fadeInUp">
+                                    <div class="col-md-4">
+                                        <div class="card text-center p-4">
+                                            <div class="icon">👥</div>
+                                            <h4 class="fw-bold">Registrar Alumnos</h4>
+                                            <a href="{{ route('alumnos.index') }}" class="btn btn-outline-success mt-3">Acceder</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center p-4">
+                                            <div class="icon">📊</div>
+                                            <h4 class="fw-bold">Evaluaciones</h4>
+                                            <a href="{{ route('evaluaciones.index') }}" class="btn btn-outline-primary mt-3">Ver</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="mt-5">
                     <a href="{{ route('logout') }}" class="btn btn-dark btn-lg px-4"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Audio de bienvenida -->
-    <audio id="bienvenidaAudio" autoplay hidden>
-        <source src="{{ asset('audio/bienvenida.mp3') }}" type="audio/mpeg">
-        Tu navegador no soporta audio.
-    </audio>
 
     <script>
         document.addEventListener("click", () => {
@@ -190,6 +216,5 @@
         }, { once: true });
     </script>
 
-    <!-- Librería animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 @endsection

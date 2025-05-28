@@ -69,10 +69,7 @@ public function partidas()
 {
     return $this->hasMany(Partida::class);
 }
-public function user()
-{
-    return $this->belongsTo(User::class);
-}
+
 
 
 

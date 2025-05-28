@@ -24,8 +24,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::dropIfExists('logro_user');
-    }
+   public function down(): void
+{
+    Schema::dropIfExists('logro_user');
+}
+
 };
