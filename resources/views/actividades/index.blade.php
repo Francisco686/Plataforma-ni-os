@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -25,20 +26,21 @@
         <!-- Título -->
         <h2 class="text-center fw-bold mb-5 display-4 text-primary animate__animated animate__pulse"
             style="font-size: 3rem; font-weight: 900;">
-            🌱 ¡Explora tus Talleres!
+            🌱 ¡Explora y aprende!
         </h2>
 
-        <!-- Contenedor de tarjetas horizontal -->
+        <!-- Contenedor de tarjetas -->
         <div class="d-flex flex-wrap justify-content-center">
 
-
-            <!-- Tarjetas fijas -->
-            <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
+            <!-- Tarjeta: Taller del Agua -->
+            <div class="flex-shrink-0 mx-2" style="width: 280px;">
                 <div class="card h-100 border-primary shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/agua.png') }}" alt="Agua" class="mb-3" style="height: 100px;">
+                        <img src="{{ asset('img/aguaw.jpg') }}" alt="Agua" class="mb-3" style="height: 120px;">
                         <h5 class="fw-bold text-primary mb-3" style="font-size: 1.7rem;">💧 Taller del Agua</h5>
-                        <p style="font-size: 1.2rem;">Aprende a cuidar el agua con cuentos, juegos y actividades.</p>
+                        <p style="font-size: 1.2rem;">
+                            Este taller incluye <strong>5 sesiones</strong> donde podrás aprender y evaluar tus conocimientos sobre el cuidado del agua.
+                        </p>
                         <a href="{{ route('talleres.agua') }}" class="btn btn-outline-primary rounded-pill mt-3">
                             <i class="fas fa-tint me-2"></i> ¡Vamos!
                         </a>
@@ -46,12 +48,15 @@
                 </div>
             </div>
 
-            <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
+            <!-- Tarjeta: Taller de Reciclaje -->
+            <div class="flex-shrink-0 mx-2" style="width: 280px;">
                 <div class="card h-100 border-warning shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/reciclaje.jpg') }}" alt="Reciclaje" class="mb-3" style="height: 100px;">
+                        <img src="{{ asset('img/recicla2.jpg') }}" alt="Reciclaje" class="mb-3" style="height: 120px;">
                         <h5 class="fw-bold text-warning mb-3" style="font-size: 1.7rem;">♻️ Taller de Reciclaje</h5>
-                        <p style="font-size: 1.2rem;">Descubre cómo reciclar de forma divertida y creativa.</p>
+                        <p style="font-size: 1.2rem;">
+                            Este taller tiene <strong>4 sesiones</strong> donde descubrirás cómo reciclar de forma divertida y evaluarás lo aprendido.
+                        </p>
                         <a href="{{ route('talleres.reciclaje') }}" class="btn btn-outline-warning rounded-pill mt-3">
                             <i class="fas fa-recycle me-2"></i> ¡A reciclar!
                         </a>
@@ -59,13 +64,16 @@
                 </div>
             </div>
 
-            <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
+            <!-- Tarjeta: Taller de Reutilizar -->
+            <div class="flex-shrink-0 mx-2" style="width: 280px;">
                 <div class="card h-100 border-success shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/reutilizarfeliz.jpg') }}" alt="Reutilizar" class="mb-3" style="height: 90px;">
+                        <img src="{{ asset('img/reutilizar2.jpg') }}" alt="Reutilizar" class="mb-3" style="height: 120px;">
                         <h5 class="fw-bold text-success mb-3" style="font-size: 1.7rem;">🔁 Taller de Reutilizar</h5>
-                        <p style="font-size: 1.2rem;">Dale una segunda vida a los objetos con actividades creativas.</p>
-                        <a href="{{ route('talleres.reutilizar') }}" class="btn btn-outline-success rounded-pill mt-3">
+                        <p style="font-size: 1.2rem;">
+                            Participa en <strong>3 sesiones</strong> donde aprenderás a darle una segunda vida a los objetos y pondrás a prueba tus conocimientos.
+                        </p>
+                        <a href="{{ route('actividades.reutilizar.index') }}" class="btn btn-outline-success rounded-pill mt-3">
                             <i class="fas fa-sync-alt me-4"></i> ¡Reutilicemos!
                         </a>
                     </div>
@@ -74,11 +82,14 @@
 
             <!-- Tarjetas dinámicas -->
             @foreach($talleres as $taller)
-                <div class="flex-shrink-0" style="width: 300px; scroll-snap-align: start;">
+                <div class="flex-shrink-0 mx-2" style="width: 300px;">
                     <div class="card h-100 border-0 shadow-lg rounded-4 animate__animated animate__fadeInUp">
                         <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
                             <h5 class="fw-bold text-dark mb-3" style="font-size: 1.6rem;">📘 {{ $taller->titulo }}</h5>
-                            <p class="text-muted" style="font-size: 1.2rem;">{{ Str::limit($taller->descripcion, 100) }}</p>
+
+                            <p class="text-muted" style="font-size: 1.2rem;">
+                                Este taller tiene <strong>{{ $taller->sesiones->count() }} sesiones</strong> en las que podrás aprender y evaluar tus conocimientos.
+                            </p>
 
                             @if($taller->materiales)
                                 <a href="{{ asset('storage/' . $taller->materiales) }}" target="_blank"
@@ -107,7 +118,7 @@
             height: auto !important;
             min-height: 100vh;
             overflow-y: auto;
-            background-color: #f0fdf4;
+            background-color: #ffffffcc;
             font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
@@ -135,7 +146,6 @@
             z-index: 1000;
         }
 
-        /* Scroll personalizado */
         .d-flex.overflow-auto::-webkit-scrollbar {
             height: 8px;
         }

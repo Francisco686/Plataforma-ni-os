@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -30,27 +31,33 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // app/Models/User.php (Alumno)
 
-    public function talleresAsignados()
+
+    // app/Models/User.php
+    public function sesiones()
     {
-        return $this->belongsToMany(Taller::class, 'asigna_tallers', 'user_id', 'taller_id')
+        return $this->belongsToMany(SesionActividad::class, 'actividad_estudiante', 'estudiante_id', 'actividad_id')
+            ->withPivot(['estado', 'fecha_inicio', 'fecha_completado', 'respuesta'])
             ->withTimestamps();
     }
 
-    public function talleres()
+    // app/Models/User.php
+    // app/Models/User.php
+    public function actividades()
     {
-        return $this->belongsToMany(Taller::class, 'alumno_taller');
+        return $this->belongsToMany(Actividad::class, 'actividad_estudiantes', 'estudiante_id', 'actividad_id')
+            ->withPivot(['estado', 'fecha_inicio', 'fecha_completado', 'respuesta'])
+            ->withTimestamps();
     }
 
-    public function respuestas()
-    {
-        return $this->hasMany(\App\Models\RespuestaAlumno::class);
-    }
-
-    public function grupo()
+    // Versión en inglés
+    public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class, 'grupo_id');
     }
+
+// Versión en español (usa la versión inglesa internamente)
 
     public function isDocente()
     {
@@ -69,6 +76,17 @@ public function partidas()
 {
     return $this->hasMany(Partida::class);
 }
+
+    public function respuestas() {
+        return $this->hasMany(RespuestaSesion::class, 'estudiante_id');
+    }
+
+    public function talleresAsignados() {
+        return $this->hasMany(TallerAsignado::class);
+    }
+
+// app/Models/User.php (Alumno)
+
 
 
 

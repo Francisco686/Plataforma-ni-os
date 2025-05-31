@@ -19,7 +19,6 @@ Schema::create('secciones_taller', function (Blueprint $table) {
     $table->string('titulo');
     $table->text('contenido')->nullable();
     $table->json('opciones')->nullable(); // para tipo test
-    $table->string('respuesta_correcta')->nullable(); // para test
     $table->timestamps();
 });
 

@@ -9,15 +9,20 @@
                         <div class="animate__animated animate__fadeInDown">
                             <h1 class="text-white font-weight-bold mb-3"><strong>¡Bienvenid@, {{ Auth::user()->name }}!</strong></h1>
 
+
                             @if(Auth::user()->role === 'alumno' && Auth::user()->grupo)
                                 <div class="alert alert-info text-center mb-4">
                                     Tu grupo es: <strong>{{ Auth::user()->grupo->grado }}°{{ strtoupper(Auth::user()->grupo->grupo) }}</strong>
                                 </div>
                             @endif
                         </div>
+                        <div class="mt-5 animate__animated animate__fadeInUp text-start ps-md-5">
+                            <a href="{{ route('talleres.index') }}" class="btn btn-warning btn-lg rounded-pill shadow px-4">
+                                <i class="fas fa-arrow-left me-2"></i> Volver a mis talleres
+                            </a>
+                        </div>
 
-
-                        @if(Auth::user()->role === 'alumno')
+                    @if(Auth::user()->role === 'alumno')
 
                             <div class="tab-content " id="tab-reutilizar">
                                 <!-- Pestaña Inicio -->
@@ -117,10 +122,10 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <img src="{{ asset('assets/images/reutilizar4.jpg') }}"
-                                                                     alt="Niño tomando agua"
+                                                                     alt="botellas reutilizas"
                                                                      class="rounded hover-zoom"
                                                                      data-bs-toggle="tooltip"
-                                                                     title="El agua nos da vida">
+                                                                     title="tubos de papel de baño">
                                                             </div>
                                                             <div class="col-6">
                                                                 <img src="{{ asset('assets/images/reutilizar5.jpg') }}"
@@ -134,14 +139,14 @@
                                                                      alt="Niño tomando agua"
                                                                      class="rounded hover-zoom"
                                                                      data-bs-toggle="tooltip"
-                                                                     title="El agua nos da vida">
+                                                                     title="Botellas reutilizadas">
                                                             </div>
                                                             <div class="col-6">
                                                                 <img src="{{ asset('assets/images/reutilizar7.jpg') }}"
                                                                      alt="Ahorrando agua"
                                                                      class="rounded hover-zoom"
                                                                      data-bs-toggle="tooltip"
-                                                                     title="Todos podemos ayudar">
+                                                                     title="Latas reutilizadas">
                                                             </div>
                                                         </div>
 
@@ -235,14 +240,7 @@
                             </div>
                         @endif
 
-                        <div class="mt-5 animate__animated animate__fadeInUp">
-                            <a href="{{ route('talleres.index') }}" class="btn btn-dark btn-lg btn-hover">
-                                <i class="fas fa-sign-out-alt icon-animate"></i> Regresar
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
+
                     </div>
                 </div>
             </div>

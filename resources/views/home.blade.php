@@ -135,35 +135,46 @@
                     </div>
                 @endif
 
+                {{-- Para alumnos --}}
                 @if(Auth::user()->role === 'alumno')
                     <p class="lead text-dark mb-5 fs-4 mt-4">
                         ¡Explora tus talleres, juegos y logros mágicos! 🌟🧠
                     </p>
 
                     <div class="row g-4 justify-content-center animate__animated animate__fadeInUp">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card text-center p-4">
                                 <div class="icon">📚</div>
                                 <h4 class="fw-bold">Mis Talleres</h4>
                                 <a href="{{ route('talleres.index') }}" class="btn btn-outline-success mt-3">Ir</a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card text-center p-4">
                                 <div class="icon">🎮</div>
-                                <h4 class="fw-bold">Zona de Juegos</h4>
+                                <h4 class="fw-bold">Juegos</h4>
                                 <a href="{{ route('juegos.index') }}" class="btn btn-outline-info mt-3">Ir</a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card text-center p-4">
                                 <div class="icon">🏅</div>
                                 <h4 class="fw-bold">Mis Logros</h4>
                                 <a href="{{ route('logros.index') }}" class="btn btn-outline-primary mt-3">Ver</a>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="card text-center p-4">
+                                <div class="icon">📝</div>
+                                <h4 class="fw-bold">Actividades</h4>
+                                <a href="{{ route('actividades1.index') }}" class="btn btn-outline-warning mt-3">Explorar</a>
+                            </div>
+                        </div>
                     </div>
                 @endif
+
+
+
 
                 @if(Auth::user()->role === 'docente')
                     <div class="container-fluid px-3 px-md-5 position-relative mt-5">
@@ -186,6 +197,13 @@
                                             <div class="icon">📊</div>
                                             <h4 class="fw-bold">Evaluaciones</h4>
                                             <a href="{{ route('evaluaciones.index') }}" class="btn btn-outline-primary mt-3">Ver</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center p-4">
+                                            <div class="icon">📝</div>
+                                            <h4 class="fw-bold">Actividades</h4>
+                                            <a href="{{ route('actividades1.index') }}" class="btn btn-outline-primary mt-3">Ver</a>
                                         </div>
                                     </div>
                                 </div>

@@ -13,6 +13,32 @@ use App\Http\Controllers\RespuestasController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\JuegoController;
 use App\Http\Controllers\LogroController;
+use App\Http\Controllers\ActividadController;
+Route::get('/actividades/{sesion}/{actividad}/responder', [ActividadController::class, 'responder'])->name('actividad.responder');
+Route::get('/actividades/{sesion}/{actividad}/respuesta', [ActividadController::class, 'verRespuesta'])->name('actividad.respuesta');
+Route::post('/actividades/{actividad}/calificar', [ActividadController::class, 'calificar'])->name('actividad.calificar');
+
+// Para docentes
+Route::prefix('actividades/reutilizar')->group(function() {
+    Route::get('/', [ActividadController::class, 'reutilizarIndex'])->name('actividades.reutilizar.index');
+    Route::get('/crear', [ActividadController::class, 'reutilizarCreate'])->name('actividades.reutilizar.create');
+    Route::post('/', [ActividadController::class, 'reutilizarStore'])->name('actividades.reutilizar.store');
+    Route::get('actividades/reutilizar/{sesion}/{actividad?}', [ActividadController::class, 'show'])
+        ->name('actividades.reutilizar.show');
+    Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.reutilizar.destroy');
+});
+
+Route::post('sesiones/{sesion}/responder', [ActividadController::class, 'responderStore'])
+    ->name('actividades.responder.store');
+Route::get('/actividades/reutilizar/{id}/edit', [TuControlador::class, 'edit'])->name('actividades.reutilizar.edit');
+Route::get('/evaluaciones/alumno/{id}', [EvaluacionController::class, 'show'])->name('evaluaciones.show');
+// Mostrar sesión para responder
+Route::get('/actividades1', [ActividadController::class, 'index'])->name('actividades1.index');
+Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');
+
+// Guardar respuestas
+Route::post('sesiones/{sesion}/responder', [ActividadController::class, 'responderStore'])
+    ->name('actividades.responder.store');
 
 Route::get('/workshop', [WorkshopController::class, 'show']);
 Route::post('/workshop/combine', [WorkshopController::class, 'combine']);

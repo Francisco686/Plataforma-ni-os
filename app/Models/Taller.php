@@ -37,9 +37,12 @@ class Taller extends Model
     /**
      * Relación específica con alumnos (si se usa una tabla intermedia distinta).
      */
+    // app/Models/Taller.php
     public function alumnos()
     {
-        return $this->belongsToMany(User::class, 'alumno_taller');
+        return $this->belongsToMany(User::class, 'taller_asignados', 'taller_id', 'user_id')
+            ->withPivot(['completado', 'progreso'])
+            ->withTimestamps();
     }
 
     /**

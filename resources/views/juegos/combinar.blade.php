@@ -99,7 +99,24 @@
     </style>
 
     <div class="container py-5">
-        <h2 class="text-center mb-4 text-success fw-bold">🎮 Juego de Combinaciones</h2>
+        <h2 class="mb-4 fw-bold animate__animated animate__fadeInDown"
+            style="
+        background: linear-gradient(90deg, #a8edea, #43cea2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        font-size: 1.5rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    ">
+            🎮 Juego de Combinaciones
+        </h2>
 
         <div class="row justify-content-center">
             <div class="col-md-8">
