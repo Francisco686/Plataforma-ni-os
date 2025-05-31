@@ -4,7 +4,15 @@
     <div class="container mt-5">
         <h2 class="mb-4 text-center text-primary">Lista de Alumnos</h2>
 
-        @if($alumnos->isEmpty())
+        <div class="mb-3">
+            <a href="{{ url()->previous() }}" class="btn"
+               style="background: linear-gradient(135deg, #98FF98, #66DDAA); color: #000; border: none;">
+                <i class="fas fa-arrow-left"></i> Regresar
+            </a>
+        </div>
+
+
+    @if($alumnos->isEmpty())
             <div class="alert alert-info">No hay alumnos registrados en el sistema.</div>
         @else
             <div class="table-responsive">
@@ -80,8 +88,8 @@
                                 @endphp
                                 <p><strong>Progreso General:</strong>
                                     <span class="badge bg-{{ $porcentaje == 100 ? 'success' : ($porcentaje > 0 ? 'warning' : 'secondary') }}">
-                                {{ $completadas }} completadas, {{ $enProgreso }} en progreso ({{ $porcentaje }}%)
-                            </span>
+                                        {{ $completadas }} completadas, {{ $enProgreso }} en progreso ({{ $porcentaje }}%)
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -96,7 +104,6 @@
                                     @php
                                         $actividadesSesion = $sesion->actividades;
                                         $actividadesAlumnoSesion = $actividadesAlumno[$alumno->id]->whereIn('actividad_id', $actividadesSesion->pluck('id'));
-
                                         $completadasSesion = $actividadesAlumnoSesion->where('estado', 'completada')->count();
                                         $enProgresoSesion = $actividadesAlumnoSesion->where('estado', 'en_progreso')->count();
                                         $pendientesSesion = $actividadesSesion->count() - $completadasSesion - $enProgresoSesion;
@@ -110,8 +117,8 @@
                                                     aria-expanded="true" aria-controls="collapse{{ $sesion->id }}_{{ $alumno->id }}">
                                                 <strong>Sesión:</strong> {{ $sesion->titulo }}
                                                 <span class="badge ms-2 {{ $porcentajeSesion == 100 ? 'bg-light text-dark' : 'bg-dark' }}">
-                                            {{ $completadasSesion }}/{{ $actividadesSesion->count() }} completadas
-                                        </span>
+                                                    {{ $completadasSesion }}/{{ $actividadesSesion->count() }} completadas
+                                                </span>
                                             </button>
                                         </h2>
                                         <div id="collapse{{ $sesion->id }}_{{ $alumno->id }}"
@@ -144,12 +151,12 @@
                                                                 <td>{{ $actividad->pregunta ? Str::limit($actividad->pregunta, 100) : 'Actividad sin descripción' }}</td>
                                                                 <td>{{ $actividad->tipo }}</td>
                                                                 <td>
-                                                                <span class="badge bg-{{
-                                                                    $registro && $registro->estado == 'completada' ? 'success' :
-                                                                    ($registro && $registro->estado == 'en_progreso' ? 'warning' : 'secondary')
-                                                                }}">
-                                                                    {{ $registro ? ucfirst(str_replace('_', ' ', $registro->estado)) : 'pendiente' }}
-                                                                </span>
+                                                                    <span class="badge bg-{{
+                                                                        $registro && $registro->estado == 'completada' ? 'success' :
+                                                                        ($registro && $registro->estado == 'en_progreso' ? 'warning' : 'secondary')
+                                                                    }}">
+                                                                        {{ $registro ? ucfirst(str_replace('_', ' ', $registro->estado)) : 'pendiente' }}
+                                                                    </span>
                                                                 </td>
                                                                 <td>
                                                                     {{ $registro && $registro->fecha_inicio ? \Carbon\Carbon::parse($registro->fecha_inicio)->format('d/m/Y H:i') : '-' }}
@@ -160,7 +167,6 @@
                                                                 <td>
                                                                     {{ $registro && $registro->respuesta ? Str::limit($registro->respuesta, 50) : '-' }}
                                                                 </td>
-
                                                             </tr>
                                                         @endforeach
                                                         </tbody>

@@ -1,4 +1,3 @@
-{{-- resources/views/actividades/index.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -18,32 +17,36 @@
 
         {{-- Botones superiores: Volver (izquierda) y Crear Nueva Sesión (derecha) --}}
         <div class="row align-items-center mb-4">
-            <div class="col-md-6">
+            {{-- Botón Volver a la izquierda --}}
+            <div class="col-md-6 d-flex justify-content-start ps-0">
                 <a href="{{ route('actividades.index') }}"
-                   class="btn mt-1"
+                   class="btn ms-0"
                    style="
-                        background: linear-gradient(90deg, #a8edea, #43cea2);
-                        color: #000 !important;
-                        border: none;
-                        padding: 10px 40px;
-                        font-weight: 400;
-                        letter-spacing: 1px;
-                        border-radius: 8px;
-                        min-width: 250px;
-                        text-align: center;
-                        display: inline-block;
-                        transition: background 0.3s ease;">
+            background: linear-gradient(90deg, #a8edea, #43cea2);
+            color: #000 !important;
+            border: none;
+            padding: 10px 40px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            min-width: 250px;
+            text-align: center;
+            display: inline-block;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                     <i class="fas fa-arrow-left me-2"></i> Volver
                 </a>
             </div>
 
+
+            {{-- Botón Crear Nueva Sesión a la derecha --}}
             @if(auth()->user()->isDocente())
                 <div class="col-md-6 d-flex justify-content-end">
                     <a href="{{ route('actividades.reutilizar.create') }}"
                        class="btn"
                        style="
-                            background: #43cea2;
-                            color: white;
+                            background: linear-gradient(90deg, #a8edea, #43cea2);
+                            color: black;
                             font-weight: 600;
                             padding: 10px 30px;
                             border: none;
@@ -78,7 +81,7 @@
                                 <th>Título</th>
                                 <th>Tipos</th>
                                 @if(auth()->user()->isAlumno())
-                                    <th>Estado</th>
+                                    <th>Proceso</th>
                                 @endif
                                 <th>Docente</th>
                                 <th>Fecha</th>
@@ -124,7 +127,6 @@
                                                                     $correctas++;
                                                                 }
                                                             } else {
-                                                                // Para otros tipos de actividad, se consideran correctas por enviarlas
                                                                 $correctas++;
                                                             }
                                                         }
@@ -135,8 +137,8 @@
                                                 @endphp
 
                                                 <span class="badge bg-{{ $tieneIncorrectas ? 'warning' : 'success' }}">
-                {{ $tieneIncorrectas ? 'Completada con errores' : 'Completada correctamente' }}
-            </span>
+                                                    {{ $tieneIncorrectas ? 'Completada con errores' : 'Completada correctamente' }}
+                                                </span>
                                                 <div class="mt-1 small text-{{ $tieneIncorrectas ? 'danger' : 'success' }}">
                                                     @if($tieneIncorrectas)
                                                         <i class="fas fa-exclamation-circle"></i>
