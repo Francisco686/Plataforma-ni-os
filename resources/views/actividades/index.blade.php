@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -11,6 +10,20 @@
             background-repeat: no-repeat;
         }
     </style>
+    @if(session('success'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+            <div class="alert alert-success d-flex align-items-center animate__animated animate__bounceInDown" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                    <div>
+                        <h5 class="mb-0 fw-bold">¡Éxito!</h5>
+                        <p class="mb-0">{{ session('success') }}</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
 
     <!-- Botón de regreso -->
     <div class="btn-back" style="position: fixed; top: 1rem; left: 1rem; z-index: 1000;">
@@ -41,7 +54,7 @@
                         <p style="font-size: 1.2rem;">
                             Este taller incluye <strong>5 sesiones</strong> donde podrás aprender y evaluar tus conocimientos sobre el cuidado del agua.
                         </p>
-                        <a href="{{ route('talleres.agua') }}" class="btn btn-outline-primary rounded-pill mt-3">
+                        <a href="{{ route('actividades.actividades', ['tallerId' => 1]) }}" class="btn btn-outline-primary rounded-pill mt-3">
                             <i class="fas fa-tint me-2"></i> ¡Vamos!
                         </a>
                     </div>
@@ -57,7 +70,7 @@
                         <p style="font-size: 1.2rem;">
                             Este taller tiene <strong>4 sesiones</strong> donde descubrirás cómo reciclar de forma divertida y evaluarás lo aprendido.
                         </p>
-                        <a href="{{ route('talleres.reciclaje') }}" class="btn btn-outline-warning rounded-pill mt-3">
+                        <a href="{{ route('actividades.actividades', ['tallerId' => 2]) }}" class="btn btn-outline-warning rounded-pill mt-3">
                             <i class="fas fa-recycle me-2"></i> ¡A reciclar!
                         </a>
                     </div>
@@ -73,12 +86,31 @@
                         <p style="font-size: 1.2rem;">
                             Participa en <strong>3 sesiones</strong> donde aprenderás a darle una segunda vida a los objetos y pondrás a prueba tus conocimientos.
                         </p>
-                        <a href="{{ route('actividades.reutilizar.index') }}" class="btn btn-outline-success rounded-pill mt-3">
+                        <a href="{{ route('actividades.actividades', ['tallerId' => 3]) }}" class="btn btn-outline-success rounded-pill mt-3">
                             <i class="fas fa-sync-alt me-4"></i> ¡Reutilicemos!
                         </a>
                     </div>
                 </div>
             </div>
+            @if(auth()->user()->isDocente())
+                <a href="{{ route('actividades.create') }}"
+                   class="btn"
+                   style="
+                   position: fixed;
+                   top: 20px;
+                   right: 20px;
+                   background: #0d6efd;
+                   color: white;
+                   font-weight: 600;
+                   padding: 10px 30px;
+                   border: none;
+                   border-radius: 30px;
+                   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                   z-index: 999;">
+                    <i class="fas fa-plus"></i> Crear Nueva Sesión
+                </a>
+
+            @endif
 
             <!-- Tarjetas dinámicas -->
             @foreach($talleres as $taller)

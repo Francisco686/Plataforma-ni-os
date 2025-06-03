@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Actividad extends Model {
     protected $fillable = [
         'sesion_id', // Asegúrate de incluir este campo
+        'taller_id',
         'tipo',
         'pregunta',
         'contenido',

@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">Pregunta *</label>
-                <textarea class="form-control" name="actividades[0][contenido]" rows="3" required></textarea>
+                <textarea class="form-control" name="actividades[0][pregunta]" rows="3" required></textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label">Respuesta Correcta (Opcional)</label>

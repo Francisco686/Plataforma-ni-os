@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="{{ route('actividades.reutilizar.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('actividades.actividades', isset($taller_id) ? ['tallerId' => $taller_id] : [] ) }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Volver
                     </a>
                     @if(auth()->user()->isDocente())

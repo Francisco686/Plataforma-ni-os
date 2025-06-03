@@ -1,13 +1,20 @@
+{{-- resources/views/actividades/actividades.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
     <div class="container py-4">
-
+        <!-- Banner superior -->
         <div class="row mb-4">
             <div class="col text-center">
                 <div class="px-4 py-3 rounded shadow-sm d-inline-block"
                      style="background-color: #a8edea; color: #000; max-width: 100%; min-width: 700px;">
-                    <h2 class="mb-1" style="font-size: 2rem;">Sesiones de Actividades</h2>
+                    <h2 class="mb-1" style="font-size: 2rem;">
+                        @if($tallerSeleccionado)
+                            Sesiones del Taller de {{ $tallerSeleccionado }}
+                        @else
+                            Sesiones de Actividades
+                        @endif
+                    </h2>
                     <p class="mb-0 small">
                         {{ auth()->user()->isDocente() ? 'Gestiona tus sesiones de actividades' : 'Sesiones asignadas por tus docentes' }}
                     </p>
@@ -15,48 +22,15 @@
             </div>
         </div>
 
-        {{-- Botones superiores: Volver (izquierda) y Crear Nueva Sesión (derecha) --}}
+        <!-- Botones superiores -->
         <div class="row align-items-center mb-4">
-            {{-- Botón Volver a la izquierda --}}
-            <div class="col-md-6 d-flex justify-content-start ps-0">
+            <div class="col-md-6">
                 <a href="{{ route('actividades.index') }}"
-                   class="btn ms-0"
-                   style="
-            background: linear-gradient(90deg, #a8edea, #43cea2);
-            color: #000 !important;
-            border: none;
-            padding: 10px 40px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border-radius: 8px;
-            min-width: 250px;
-            text-align: center;
-            display: inline-block;
-            transition: background 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                   class="btn mt-1"
+                   style="background: linear-gradient(90deg, #a8edea, #43cea2); color: #000 !important; border: none; padding: 10px 40px; font-weight: 400; letter-spacing: 1px; border-radius: 8px; min-width: 250px; text-align: center; display: inline-block; transition: background 0.3s ease;">
                     <i class="fas fa-arrow-left me-2"></i> Volver
                 </a>
             </div>
-
-
-            {{-- Botón Crear Nueva Sesión a la derecha --}}
-            @if(auth()->user()->isDocente())
-                <div class="col-md-6 d-flex justify-content-end">
-                    <a href="{{ route('actividades.reutilizar.create') }}"
-                       class="btn"
-                       style="
-                            background: linear-gradient(90deg, #a8edea, #43cea2);
-                            color: black;
-                            font-weight: 600;
-                            padding: 10px 30px;
-                            border: none;
-                            border-radius: 8px;
-                            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-                            margin-right: 10px;">
-                        <i class="fas fa-plus"></i> Crear Nueva Sesión
-                    </a>
-                </div>
-            @endif
         </div>
 
         @if(session('success'))
@@ -74,6 +48,7 @@
                         </p>
                     </div>
                 @else
+                    <!-- Mantén todo el código de tu tabla de sesiones existente -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
@@ -81,7 +56,7 @@
                                 <th>Título</th>
                                 <th>Tipos</th>
                                 @if(auth()->user()->isAlumno())
-                                    <th>Proceso</th>
+                                    <th>Estado</th>
                                 @endif
                                 <th>Docente</th>
                                 <th>Fecha</th>
@@ -127,6 +102,7 @@
                                                                     $correctas++;
                                                                 }
                                                             } else {
+                                                                // Para otros tipos de actividad, se consideran correctas por enviarlas
                                                                 $correctas++;
                                                             }
                                                         }
@@ -137,8 +113,8 @@
                                                 @endphp
 
                                                 <span class="badge bg-{{ $tieneIncorrectas ? 'warning' : 'success' }}">
-                                                    {{ $tieneIncorrectas ? 'Completada con errores' : 'Completada correctamente' }}
-                                                </span>
+                {{ $tieneIncorrectas ? 'Completada con errores' : 'Completada correctamente' }}
+            </span>
                                                 <div class="mt-1 small text-{{ $tieneIncorrectas ? 'danger' : 'success' }}">
                                                     @if($tieneIncorrectas)
                                                         <i class="fas fa-exclamation-circle"></i>
@@ -169,7 +145,11 @@
                                         <div class="d-flex align-items-center gap-2 flex-wrap">
                                             @if(auth()->user()->isDocente())
                                                 @if($sesion->actividades->isNotEmpty())
-                                                    <a href="{{ route('actividades.reutilizar.show', ['sesion' => $sesion->id, 'actividad' => $sesion->actividades->first()->id]) }}"
+                                                    <a href="{{ route('actividades.show', [
+                                                            'sesion' => $sesion->id,
+                                                            'actividad' => $sesion->actividades->first()->id,
+                                                            'taller_id' => $taller_id
+                                                        ]) }}"
                                                        class="btn btn-sm btn-info me-2"
                                                        data-bs-toggle="tooltip" title="Ver actividad">
                                                         <i class="fas fa-eye"></i> Ver
@@ -181,13 +161,13 @@
                                                     </button>
                                                 @endif
 
-                                                <a href="{{ route('actividades.reutilizar.edit', $sesion->id) }}"
+                                                <a href="{{ route('actividades.edit', $sesion->id) }}"
                                                    class="btn btn-sm btn-warning me-2"
                                                    data-bs-toggle="tooltip" title="Editar sesión">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
-                                                <form action="{{ route('actividades.reutilizar.destroy', $sesion->id) }}"
+                                                <form action="{{ route('actividades.destroy', $sesion->id) }}"
                                                       method="POST"
                                                       onsubmit="return confirm('¿Estás seguro de eliminar esta sesión?');"
                                                       style="display: inline-block; margin-bottom: 0;">
@@ -207,7 +187,11 @@
                                                             <i class="fas fa-check-circle"></i> Respondida
                                                         </button>
                                                     @else
-                                                        <a href="{{ route('actividades.reutilizar.show', ['sesion' => $sesion->id, 'actividad' => $sesion->actividades->first()->id]) }}"
+                                                        <a href="{{ route('actividades.show', [
+                                                                'sesion' => $sesion->id,
+                                                                'actividad' => $sesion->actividades->first()->id,
+                                                                'taller_id' => $taller_id
+                                                            ]) }}"
                                                            class="btn btn-sm btn-primary me-2"
                                                            data-bs-toggle="tooltip" title="Responder actividades">
                                                             <i class="fas fa-pencil-alt"></i> Responder
@@ -226,41 +210,39 @@
             </div>
         </div>
     </div>
-@endsection
+    @push('styles')
+        <style>
+            .btn-gradient {
+                background: linear-gradient(90deg, #a8edea, #43cea2);
+                color: #000 !important;
+                border: none;
+                padding: 10px 30px;
+                font-weight: 500;
+                border-radius: 8px;
+                transition: background 0.3s ease;
+            }
+            .progress {
+                min-width: 100px;
+            }
+            .table-success {
+                background-color: rgba(25, 135, 84, 0.1);
+            }
+            .table-warning {
+                background-color: rgba(255, 193, 7, 0.1);
+            }
+            .table-light {
+                background-color: rgba(248, 249, 250, 0.5);
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <style>
-        .btn-gradient {
-            background: linear-gradient(90deg, #a8edea, #43cea2);
-            color: #000 !important;
-            border: none;
-            padding: 10px 30px;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
-        .progress {
-            min-width: 100px;
-        }
-        .table-success {
-            background-color: rgba(25, 135, 84, 0.1);
-        }
-        .table-warning {
-            background-color: rgba(255, 193, 7, 0.1);
-        }
-        .table-light {
-            background-color: rgba(248, 249, 250, 0.5);
-        }
-    </style>
-@endpush
-
-@section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (el) {
-                return new bootstrap.Tooltip(el);
+    @section('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (el) {
+                    return new bootstrap.Tooltip(el);
+                });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

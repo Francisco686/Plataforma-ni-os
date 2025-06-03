@@ -18,19 +18,34 @@ Route::get('/actividades/{sesion}/{actividad}/responder', [ActividadController::
 Route::get('/actividades/{sesion}/{actividad}/respuesta', [ActividadController::class, 'verRespuesta'])->name('actividad.respuesta');
 Route::post('/actividades/{actividad}/calificar', [ActividadController::class, 'calificar'])->name('actividad.calificar');
 
+
 // Para docentes
 Route::prefix('actividades/reutilizar')->group(function() {
-    Route::get('/', [ActividadController::class, 'reutilizarIndex'])->name('actividades.reutilizar.index');
-    Route::get('/crear', [ActividadController::class, 'reutilizarCreate'])->name('actividades.reutilizar.create');
-    Route::post('/', [ActividadController::class, 'reutilizarStore'])->name('actividades.reutilizar.store');
-    Route::get('actividades/reutilizar/{sesion}/{actividad?}', [ActividadController::class, 'show'])
-        ->name('actividades.reutilizar.show');
-    Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.reutilizar.destroy');
+    // Para el index de actividades
+    Route::get('/actividades', [ActividadController::class, 'ActividadesIndex'])->name('actividades.index');
+
+// Para actividades filtradas por taller
+    Route::get('/actividades/{tallerId}', [ActividadController::class, 'ActividadesIndex'])->name('actividades.actividades');
+    Route::get('/crear', [ActividadController::class, 'Create'])->name('actividades.create');
+    Route::post('/', [ActividadController::class, 'Store'])->name('actividades.store');
+// For docente view
+    Route::get('actividades/{sesion}/{actividad}', [ActividadController::class, 'show'])
+        ->name('actividades.show');
+
+// For alumno view
+    Route::get('actividades-reutilizar/{sesion}/{actividad}', [ActividadController::class, 'show'])
+        ->name('actividades.show');
+    Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
 });
+// For alumno view
+Route::get('actividades-reutilizar/{sesion}/{actividad}', [ActividadController::class, 'show'])
+    ->name('actividades.show');
+Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
+
 
 Route::post('sesiones/{sesion}/responder', [ActividadController::class, 'responderStore'])
     ->name('actividades.responder.store');
-Route::get('/actividades/reutilizar/{id}/edit', [TuControlador::class, 'edit'])->name('actividades.reutilizar.edit');
+Route::get('/actividades/{id}/edit', [TuControlador::class, 'edit'])->name('actividades.edit');
 Route::get('/evaluaciones/alumno/{id}', [EvaluacionController::class, 'show'])->name('evaluaciones.show');
 // Mostrar sesión para responder
 Route::get('/actividades1', [ActividadController::class, 'index'])->name('actividades1.index');

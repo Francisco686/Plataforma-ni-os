@@ -7,28 +7,27 @@
                 <div class="card shadow-lg">
                     <div class="card-header bg-primary text-white">
                         <h4 class="mb-0"><i class="fas fa-tasks me-2"></i>Crear Nueva Sesión de Actividades</h4>
+
                     </div>
-                    <div class="col-md-6">
-                        <a href="{{ route('actividades.reutilizar.index') }}"
-                           class="btn mt-1"
-                           style="
-                        background: linear-gradient(90deg, #a8edea, #43cea2);
-                        color: #000 !important;
-                        border: none;
-                        padding: 10px 40px;
-                        font-weight: 400;
-                        letter-spacing: 1px;
-                        border-radius: 8px;
-                        min-width: 250px;
-                        text-align: center;
-                        display: inline-block;
-                        transition: background 0.3s ease;">
-                            <i class="fas fa-arrow-left me-2"></i> Volver
-                        </a>
-                    </div>
+
                     <div class="card-body">
-                        <form action="{{ route('actividades.reutilizar.store') }}" method="POST" enctype="multipart/form-data" id="activity-form">
+                        <form action="{{ route('actividades.store') }}" method="POST"
+                              enctype="multipart/form-data" id="activity-form">
                             @csrf
+
+
+                            <div class="row mb-1">
+                                <div class="col-md-12">
+                                    <label for="taller_id" class="form-label">Taller *</label>
+                                    <select class="form-control" id="taller_id" name="taller_id" required>
+                                        <option value="">Seleccione un taller</option>
+                                        <option value="1">Taller del Agua</option>
+                                        <option value="2">Taller de Reciclaje</option>
+                                        <option value="3">Taller de Reutilizar</option>
+                                    </select>
+                                    <div class="invalid-feedback">Por favor selecciona un taller</div>
+                                </div>
+                            </div>
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
@@ -38,7 +37,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="fecha_limite" class="form-label">Fecha Límite</label>
-                                    <input type="datetime-local" class="form-control" id="fecha_limite" name="fecha_limite">
+                                    <input type="datetime-local" class="form-control" id="fecha_limite"
+                                           name="fecha_limite">
                                 </div>
                             </div>
 
@@ -50,22 +50,28 @@
                             <div class="mb-4 p-3 border rounded bg-light">
                                 <h5 class="mb-3">Agregar Nueva Actividad:</h5>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="texto">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="texto">
                                         <i class="fas fa-align-left me-1"></i> Texto Informativo
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="pregunta">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="pregunta">
                                         <i class="fas fa-question-circle me-1"></i> Pregunta Simple
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="opcion_multiple">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="opcion_multiple">
                                         <i class="fas fa-list-ol me-1"></i> Opción Múltiple
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="verdadero_falso">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="verdadero_falso">
                                         <i class="fas fa-check-circle me-1"></i> Verdadero/Falso
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="video">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="video">
                                         <i class="fas fa-video me-1"></i> Video + Pregunta
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-add-activity" data-type="archivo">
+                                    <button type="button" class="btn btn-outline-primary btn-add-activity"
+                                            data-type="archivo">
                                         <i class="fas fa-file-upload me-1"></i> Subir Archivo
                                     </button>
                                 </div>
@@ -75,7 +81,7 @@
                                 @if(old('actividades'))
                                     <!-- Si hay datos antiguos (por ejemplo, después de un error de validación) -->
                                     @foreach(old('actividades') as $index => $actividad)
-                                        @include('actividades.reutilizar.templates.'.$actividad['tipo'], [
+                                        @include('actividades.templates.'.$actividad['tipo'], [
                                             'activityId' => $index,
                                             'oldData' => $actividad
                                         ])
@@ -83,19 +89,36 @@
                                 @endif
                             </div>
 
-                            <div class="d-flex justify-content-between">
-                                <button type="button" id="btn-preview" class="btn btn-outline-secondary">
-                                    <i class="fas fa-eye me-1"></i> Vista Previa
+                            <button type="button" id="btn-preview" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-eye me-1"></i> Vista Previa
+                            </button>
+
+                            <div class="d-flex justify-content-end gap-2 mt-4">
+                                <a href="{{ route('actividades.index') }}"
+                                   class="btn"
+                                   style="
+                                   background: linear-gradient(90deg, #0d6efd);
+                                   color: #fff !important;
+                                   border: none;
+                                   padding: 10px 30px;
+                                   font-weight: 400;
+                                   letter-spacing: 1px;
+                                   border-radius: 8px;
+                                   min-width: 120px;
+                                   text-align: center;
+                                   transition: background 0.3s ease;">
+                                    <i class="fas fa-arrow-left me-1"></i> Volver
+                                </a>
+
+                                <button type="reset" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash-alt me-1"></i> Limpiar
                                 </button>
-                                <div>
-                                    <button type="reset" class="btn btn-outline-danger me-2">
-                                        <i class="fas fa-trash-alt me-1"></i> Limpiar
-                                    </button>
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-save me-1"></i> Guardar Sesión
-                                    </button>
-                                </div>
+
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-1"></i> Guardar Sesión
+                                </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -120,12 +143,12 @@
     </div>
 
     <!-- Incluir templates -->
-    @include('actividades.reutilizar.templates.texto')
-    @include('actividades.reutilizar.templates.pregunta')
-    @include('actividades.reutilizar.templates.opcion_multiple')
-    @include('actividades.reutilizar.templates.verdadero_falso')
-    @include('actividades.reutilizar.templates.video')
-    @include('actividades.reutilizar.templates.archivo')
+    @include('actividades.templates.texto')
+    @include('actividades.templates.pregunta')
+    @include('actividades.templates.opcion_multiple')
+    @include('actividades.templates.verdadero_falso')
+    @include('actividades.templates.video')
+    @include('actividades.templates.archivo')
 @endsection
 
 @section('styles')
@@ -135,35 +158,44 @@
             border-left: 4px solid #0d6efd;
             margin-bottom: 1rem;
         }
+
         .texto-activity {
             border-left-color: #6c757d;
         }
+
         .activity-card:hover {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
+
         .btn-add-option {
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
         }
+
         .sortable-ghost {
             opacity: 0.6;
             background: #cce5ff;
         }
+
         .drag-handle {
             cursor: move;
             margin-right: 0.5rem;
         }
+
         .remove-activity {
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
         }
+
         .card-header {
             position: relative;
         }
+
         .is-invalid {
             border-color: #dc3545;
         }
+
         .invalid-feedback {
             display: none;
             width: 100%;
@@ -171,6 +203,7 @@
             font-size: 0.875em;
             color: #dc3545;
         }
+
         .was-validated .form-control:invalid ~ .invalid-feedback,
         .form-control.is-invalid ~ .invalid-feedback {
             display: block;
@@ -184,7 +217,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Variables globales
             let activityCounter = {{ old('actividades') ? count(old('actividades')) : 0 }};
             const $container = $('#actividades-container');
@@ -196,14 +229,14 @@
                     handle: '.drag-handle',
                     animation: 150,
                     ghostClass: 'sortable-ghost',
-                    onEnd: function() {
+                    onEnd: function () {
                         console.log('Orden de actividades actualizado');
                     }
                 });
             }
 
             // 2. Manejador para agregar actividades
-            $(document).on('click', '.btn-add-activity', function() {
+            $(document).on('click', '.btn-add-activity', function () {
                 const type = $(this).data('type');
                 addActivity(type);
             });
@@ -286,17 +319,17 @@
             // 5. Manejadores de eventos delegados
             $(document)
                 // Eliminar actividad
-                .on('click', '.remove-activity', function() {
+                .on('click', '.remove-activity', function () {
                     $(this).closest('.activity-card').remove();
                 })
                 // Agregar opción (para opción múltiple)
-                .on('click', '.add-option', function() {
+                .on('click', '.add-option', function () {
                     const $activity = $(this).closest('.activity-card');
                     const activityId = $activity.find('input[name^="actividades["]').attr('name').match(/\[(\d+)\]/)[1];
                     addOption($activity, activityId);
                 })
                 // Eliminar opción
-                .on('click', '.remove-option', function() {
+                .on('click', '.remove-option', function () {
                     const $optionItem = $(this).closest('.option-item');
                     const $container = $optionItem.closest('.options-container');
 
@@ -309,13 +342,13 @@
                     reindexOptions($container);
                 })
                 // Vista previa
-                .on('click', '#btn-preview', function() {
+                .on('click', '#btn-preview', function () {
                     generatePreview();
                 });
 
             // 6. Función para reindexar opciones después de eliminar
             function reindexOptions($container) {
-                $container.find('.option-item').each(function(newIndex) {
+                $container.find('.option-item').each(function (newIndex) {
                     const $radio = $(this).find('.correct-option-radio');
                     const $input = $(this).find('.option-input');
 
@@ -351,7 +384,7 @@
                 if ($activities.length === 0) {
                     $previewActivities.html('<div class="alert alert-warning">No hay actividades agregadas</div>');
                 } else {
-                    $activities.each(function() {
+                    $activities.each(function () {
                         const $activity = $(this);
                         const type = $activity.find('input[name*="[tipo]"]').val() || 'desconocido';
 
@@ -374,7 +407,8 @@
                 // Mostrar modal
                 modal.show();
             }
-            $form.on('submit', function(e) {
+
+            $form.on('submit', function (e) {
                 let isValid = true;
                 const $firstInvalid = $('.is-invalid').first();
 
@@ -390,7 +424,7 @@
                 }
 
                 // Validar cada actividad
-                $('.activity-card').each(function() {
+                $('.activity-card').each(function () {
                     const $activity = $(this);
                     const tipo = $activity.find('input[name$="[tipo]"]').val();
                     const $cardBody = $activity.find('.card-body');
@@ -414,13 +448,13 @@
                     }
 
                     // Validación específica por tipo
-                    switch(tipo) {
+                    switch (tipo) {
                         case 'opcion_multiple':
                             // Validar que hay al menos 2 opciones
                             const $opciones = $cardBody.find('.option-input');
                             let opcionesValidas = 0;
 
-                            $opciones.each(function() {
+                            $opciones.each(function () {
                                 if ($(this).val().trim() === '') {
                                     $(this).addClass('is-invalid');
                                     isValid = false;

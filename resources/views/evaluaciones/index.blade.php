@@ -2,14 +2,22 @@
 
 @section('content')
     <div class="container mt-5">
-        <h2 class="mb-4 text-center text-primary">Lista de Alumnos</h2>
+
+        <div class="d-flex justify-content-center">
+
+                <h2 class="text-center p-3 px-5 rounded" style="background-color:#cfe2ff; color: #000; min-width: 600px; max-width: 80%;">
+                    Lista de Alumnos
+                </h2>
+            </div>
+
 
         <div class="mb-3">
             <a href="{{ url()->previous() }}" class="btn"
-               style="background: linear-gradient(135deg, #98FF98, #66DDAA); color: #000; border: none;">
+               style="background: linear-gradient(135deg, #0d6efd); color: #fff; border: none;">
                 <i class="fas fa-arrow-left"></i> Regresar
             </a>
         </div>
+
 
 
     @if($alumnos->isEmpty())
@@ -22,7 +30,7 @@
                         <th>#</th>
                         <th>Nombre Completo</th>
                         <th>Grado y Grupo</th>
-                        <th>Acciones</th>
+                        <th>Progreso</th>
                     </tr>
                     </thead>
                     <tbody>
