@@ -61,6 +61,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Group::class, 'grupo_id');
     }
+    public function grupo()
+    {
+        return $this->belongsTo(Group::class, 'grupo_id'); // Especifica la columna correcta
+    }
 
 // Versión en español (usa la versión inglesa internamente)
 

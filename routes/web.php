@@ -20,7 +20,7 @@ Route::post('/actividades/{actividad}/calificar', [ActividadController::class, '
 
 
 // Para docentes
-Route::prefix('actividades/reutilizar')->group(function() {
+Route::prefix('actividades/actividades')->group(function() {
     // Para el index de actividades
     Route::get('/actividades', [ActividadController::class, 'ActividadesIndex'])->name('actividades.index');
 
@@ -35,24 +35,18 @@ Route::prefix('actividades/reutilizar')->group(function() {
 // For alumno view
     Route::get('actividades-reutilizar/{sesion}/{actividad}', [ActividadController::class, 'show'])
         ->name('actividades.show');
+
     Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
 });
-// For alumno view
-Route::get('actividades-reutilizar/{sesion}/{actividad}', [ActividadController::class, 'show'])
-    ->name('actividades.show');
-Route::delete('/{sesion}', [ActividadController::class, 'destroy'])->name('actividades.destroy');
 
 
-Route::post('sesiones/{sesion}/responder', [ActividadController::class, 'responderStore'])
-    ->name('actividades.responder.store');
 Route::get('/actividades/{id}/edit', [TuControlador::class, 'edit'])->name('actividades.edit');
 Route::get('/evaluaciones/alumno/{id}', [EvaluacionController::class, 'show'])->name('evaluaciones.show');
 // Mostrar sesión para responder
 Route::get('/actividades1', [ActividadController::class, 'index'])->name('actividades1.index');
 Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');
 
-// Guardar respuestas
-Route::post('sesiones/{sesion}/responder', [ActividadController::class, 'responderStore'])
+Route::post('sesiones/{sesion}/responder/{taller_id}', [ActividadController::class, 'responderStore'])
     ->name('actividades.responder.store');
 
 Route::get('/workshop', [WorkshopController::class, 'show']);

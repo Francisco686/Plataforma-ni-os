@@ -187,6 +187,14 @@
                                                             <i class="fas fa-check-circle"></i> Respondida
                                                         </button>
                                                     @else
+
+
+                                                        {{--  <div class="debug-info bg-light p-2 mb-2 small">
+                                                            <strong>Depuración:</strong><br>
+                                                            Taller ID desde URL: {{ $taller_id ?? 'null' }}<br>
+                                                            Taller ID primera actividad: {{ $sesion->actividades->first()->taller_id }}<br>
+                                                            Coinciden: {{ ($taller_id == $sesion->actividades->first()->taller_id) ? 'Sí' : 'No' }}
+                                                        </div> --}}
                                                         <a href="{{ route('actividades.show', [
                                                                 'sesion' => $sesion->id,
                                                                 'actividad' => $sesion->actividades->first()->id,

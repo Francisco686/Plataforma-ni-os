@@ -10,17 +10,20 @@ use App\Models\Group;
 
 class AlumnoController extends Controller
 {
-public function index()
-{
-    $grupos = Group::all();
-    $grupo = Auth::user()->grupo;
+    public function index()
+    {
+        $grupos = Group::all();
+        $grupo = Auth::user()->grupo;
 
-    $alumnos = $grupo ? $grupo->alumnos()->where('role', 'alumno')->get() : [];
+        // Versión corregida usando el nombre correcto de columna
+        $alumnos = $grupo ? User::where('grupo_id', $grupo->id)
+            ->where('role', 'alumno')
+            ->get() : collect();
 
-    $total = $alumnos ? $alumnos->count() : 0;
+        $total = $alumnos->count();
 
-    return view('alumnos.index', compact('grupos', 'alumnos', 'total'));
-}
+        return view('alumnos.index', compact('grupos', 'alumnos', 'total'));
+    }
 
 
 
