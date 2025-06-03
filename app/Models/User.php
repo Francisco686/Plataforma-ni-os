@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -41,6 +42,10 @@ class User extends Authenticatable
             ->withPivot(['estado', 'fecha_inicio', 'fecha_completado', 'respuesta'])
             ->withTimestamps();
     }
+    public function talleres(): BelongsToMany
+    {
+        return $this->belongsToMany(Taller::class, 'asigna_tallers');
+    }
 
     // app/Models/User.php
     // app/Models/User.php
@@ -68,14 +73,14 @@ class User extends Authenticatable
         return $this->role === 'alumno';
     }
     public function logros()
-{
-    return $this->belongsToMany(Logro::class)->withPivot('fecha_obtenido');
-}
+    {
+        return $this->belongsToMany(Logro::class)->withPivot('fecha_obtenido');
+    }
 
-public function partidas()
-{
-    return $this->hasMany(Partida::class);
-}
+    public function partidas()
+    {
+        return $this->hasMany(Partida::class);
+    }
 
     public function respuestas() {
         return $this->hasMany(RespuestaSesion::class, 'estudiante_id');
