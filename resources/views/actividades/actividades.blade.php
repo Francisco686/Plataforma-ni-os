@@ -95,14 +95,31 @@
                                                     $totalCalificables = 0;
                                                     foreach($sesion->actividades as $actividad) {
                                                         $respuesta = $actividad->respuestasAlumno->where('estudiante_id', auth()->id())->first();
+
+                                                        // DEBUG: Mostrar información de depuración
+                                                        \Log::debug("Actividad ID: {$actividad->id} - Tipo: {$actividad->tipo}");
+                                                        \Log::debug("Respuesta correcta: {$actividad->respuesta_correcta}");
+                                                        if($respuesta) {
+                                                            \Log::debug("Respuesta alumno: {$respuesta->respuesta} - Estado: {$respuesta->estado}");
+                                                        } else {
+                                                            \Log::debug("No hay respuesta del alumno");
+                                                        }
+
                                                         if($respuesta && $respuesta->estado == 'completada') {
                                                             if(in_array($actividad->tipo, ['opcion_multiple', 'verdadero_falso'])) {
                                                                 $totalCalificables++;
-                                                                if($respuesta->respuesta == $actividad->respuesta_correcta) {
+
+                                                                // DEBUG: Comparación específica
+                                                                \Log::debug("Comparando: '{$respuesta->respuesta}' con '{$actividad->respuesta_correcta}'");
+
+                                                                if(strtolower(trim($respuesta->respuesta)) == strtolower(trim($actividad->respuesta_correcta))) {
                                                                     $correctas++;
+                                                                    \Log::debug("¡Respuesta correcta!");
+                                                                } else {
+                                                                    \Log::debug("Respuesta incorrecta");
                                                                 }
                                                             } else {
-                                                                // Para otros tipos de actividad, se consideran correctas por enviarlas
+                                                                // Para otros tipos de actividad
                                                                 $correctas++;
                                                             }
                                                         }
