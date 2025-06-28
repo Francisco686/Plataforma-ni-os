@@ -24,6 +24,11 @@ class Taller extends Model
     {
         return $this->hasMany(SeccionTaller::class);
     }
+    public function sesiones()
+{
+    return $this->hasMany(SesionActividad::class, 'taller_id');
+}
+
 
     /**
      * Relación con usuarios asignados (pueden ser alumnos o docentes).

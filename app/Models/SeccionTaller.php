@@ -40,4 +40,9 @@ class SeccionTaller extends Model
     {
         return $this->hasMany(RespuestaAlumno::class, 'seccion_id');
     }
+        public function sesiones()
+{
+    return $this->hasMany(SesionActividad::class, 'seccion_taller_id');
+}
+
 }

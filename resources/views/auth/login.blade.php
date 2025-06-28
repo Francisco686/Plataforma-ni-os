@@ -158,7 +158,7 @@
     </form>
 
    <div class="text-center mt-2">
-    <a href="{{ route('recuperar.form') }}">¿Olvidaste tu contraseña?</a>
+    <a href="{{ route('recuperar.form') }}">¿Olvidassste tu contraseña?</a>
 </div>
 
 

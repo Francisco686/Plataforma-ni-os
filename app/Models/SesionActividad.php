@@ -56,6 +56,7 @@ class SesionActividad extends Model {
         return $this->belongsToMany(User::class, 'actividad_estudiante', 'actividad_id', 'estudiante_id')
             ->withPivot(['estado', 'fecha_inicio', 'fecha_completado', 'respuesta']);
     }
+    
 
 
 
