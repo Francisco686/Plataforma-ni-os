@@ -36,7 +36,7 @@
             <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
                 <div class="card h-100 border-primary shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/agua.png') }}" alt="Agua" class="mb-3" style="height: 100px;">
+                        <img src="{{ asset('img/agua.png') }}" alt="Agua" class="mb-3" style="height: 110px;">
                         <h5 class="fw-bold text-primary mb-3" style="font-size: 1.7rem;">💧 Taller del Agua</h5>
                         <p style="font-size: 1.2rem;">Aprende a cuidar el agua con cuentos, juegos y actividades.</p>
                         <a href="{{ route('talleres.agua') }}" class="btn btn-outline-primary rounded-pill mt-3">
@@ -49,7 +49,7 @@
             <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
                 <div class="card h-100 border-warning shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/reciclaje.jpg') }}" alt="Reciclaje" class="mb-3" style="height: 100px;">
+                        <img src="{{ asset('img/reciclaje.jpg') }}" alt="Reciclaje" class="mb-3" style="height: 110px;">
                         <h5 class="fw-bold text-warning mb-3" style="font-size: 1.7rem;">♻️ Taller de Reciclaje</h5>
                         <p style="font-size: 1.2rem;">Descubre cómo reciclar de forma divertida y creativa.</p>
                         <a href="{{ route('talleres.reciclaje') }}" class="btn btn-outline-warning rounded-pill mt-3">
@@ -62,7 +62,7 @@
             <div class="flex-shrink-0 mx-2" style="width: 300px; scroll-snap-align: start;">
                 <div class="card h-100 border-success shadow-lg rounded-4 animate__animated animate__zoomIn">
                     <div class="card-body d-flex flex-column justify-content-between p-4 text-center">
-                        <img src="{{ asset('img/reutilizarfeliz.jpg') }}" alt="Reutilizar" class="mb-3" style="height: 90px;">
+                        <img src="{{ asset('img/reutilizarfeliz.jpg') }}" alt="Reutilizar" class="mb-3" style="height: 120px;">
                         <h5 class="fw-bold text-success mb-3" style="font-size: 1.7rem;">🔁 Taller de Reutilizar</h5>
                         <p style="font-size: 1.2rem;">Dale una segunda vida a los objetos con actividades creativas.</p>
                         <a href="{{ route('talleres.reutilizar') }}" class="btn btn-outline-success rounded-pill mt-3">
