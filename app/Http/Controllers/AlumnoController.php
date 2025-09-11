@@ -10,22 +10,53 @@ use App\Models\Group;
 
 class AlumnoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $grupos = Group::all();
-        $grupo = Auth::user()->grupo;
+        $grados = Group::pluck('grado')->unique()->sort();
 
-        // Versión corregida usando el nombre correcto de columna
-        $alumnos = $grupo ? User::where('grupo_id', $grupo->id)
-            ->where('role', 'alumno')
-            ->get() : collect();
+        // Letras únicas de grupos, filtradas por grado si aplica
+        $letrasQuery = Group::select('grupo')->distinct()->orderBy('grupo');
+        if ($request->filled('grado')) {
+            $letrasQuery->where('grado', $request->grado);
+        }
+        $letras = $letrasQuery->pluck('grupo');
 
+        $consulta = User::where('role', 'alumno')
+            ->leftJoin('groups', 'users.grupo_id', '=', 'groups.id') // Join with groups table
+            ->select('users.*'); // Select all user fields
+
+        // Filtro por grado
+        if ($request->filled('grado')) {
+            $consulta->where('groups.grado', $request->grado);
+        }
+
+        // Filtro por grupo (letra, no ID)
+        if ($request->filled('grupo')) {
+            $consulta->where('groups.grupo', strtolower($request->grupo));
+        }
+
+        // Buscador por nombre/apellido
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $consulta->where(function($q) use ($search) {
+                $q->where('users.name', 'like', "%$search%")
+                    ->orWhere('users.apellido_paterno', 'like', "%$search%")
+                    ->orWhere('users.apellido_materno', 'like', "%$search%");
+            });
+        }
+
+        // Ordenar por grado, grupo, apellido_paterno, apellido_materno, name
+        $consulta->orderBy('groups.grado', 'asc')
+            ->orderBy('groups.grupo', 'asc')
+            ->orderBy('users.apellido_paterno', 'asc')
+            ->orderBy('users.apellido_materno', 'asc')
+            ->orderBy('users.name', 'asc');
+
+        $alumnos = $consulta->get();
         $total = $alumnos->count();
 
-        return view('alumnos.index', compact('grupos', 'alumnos', 'total'));
+        return view('alumnos.index', compact('alumnos', 'letras', 'grados', 'total'));
     }
-
-
 
     public function create()
     {
@@ -114,7 +145,6 @@ class AlumnoController extends Controller
             return redirect()->route('alumnos.index')->with('error', 'Solo puedes eliminar alumnos desde esta sección.');
         }
 
-        $alumno->talleresAsignados()->delete();
         $alumno->delete();
 
         return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado correctamente.');

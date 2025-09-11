@@ -22,28 +22,24 @@
         }
 
         .contenido-centro {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            background-color: #9fc6c1; /* fondo blanco semiopaco */
+            position: relative; /* en lugar de absolute */
+            margin: 0 auto;     /* centra horizontalmente */
             padding: 2rem;
-            border-radius: 1rem;
             width: 100%;
-            max-width: 950px;
-        }
+            max-width: 1150px;  /* aquí antes era 950px → ahora +200px */
+            z-index: 1;
+     }
 
-        .login-overlay .card {
-            padding: 16px 20px;
-            border-radius: 1.5rem;
-            background-color: #fef7e7;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: none;
-        }
+     .login-overlay .card {
+         padding: 16px 20px;
+         border-radius: 1.5rem;
+         background-color: #fef7e7;
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+         border: none;
+     }
 
 
-    </style>
+</style>
 
 </head>
 <body>

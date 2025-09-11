@@ -94,6 +94,8 @@ class User extends Authenticatable
         return $this->hasMany(TallerAsignado::class);
     }
 
+
+
 // app/Models/User.php (Alumno)
 
 

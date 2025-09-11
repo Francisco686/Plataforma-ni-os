@@ -18,4 +18,5 @@ class Alumno extends Model
     public function grupo() {
         return $this->belongsTo(\App\Models\Group::class, 'grupo_id');
     }
+
 }

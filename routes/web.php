@@ -160,6 +160,11 @@ Route::post('/recuperar-docente', [App\Http\Controllers\DocenteController::class
 Route::get('/docente/cambiar-password', [App\Http\Controllers\AuthController::class, 'mostrarCambioPassword'])->name('docente.password.cambiar');
 Route::post('/docente/cambiar-password', [App\Http\Controllers\AuthController::class, 'actualizarPassword'])->name('docente.password.actualizar');
 
+Route::post('/juegos/completar/{tipo}', [JuegoController::class, 'guardarPartida'])->name('juegos.completar');
+Route::get('/logros', [LogroController::class, 'index'])->middleware('auth')->name('logros.index');
+
+Route::post('/juegos/completar/{tipo}', [JuegoController::class, 'guardarPartida'])->name('juegos.completar');
+
 // Acceso a materiales
 Route::get('/storage/materiales/{filename}', function ($filename) {
     $path = storage_path('app/public/materiales/' . $filename);

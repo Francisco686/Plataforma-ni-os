@@ -9,6 +9,6 @@ class Logro extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('fecha_obtenido')->withTimestamps();
+        return $this->belongsToMany(User::class, 'logro_user')->withPivot('fecha_obtenido');
     }
 }
